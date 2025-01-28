@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1018698907487",
+    "project_id": "navigaurd-16516",
+    "storage_bucket": "navigaurd-16516.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018698907487:android:5245248bee991148a780ea",
+        "android_client_info": {
+          "package_name": "com.example.navigaurd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1018698907487-cf9hsmsa4dh16aaeuj0n7fikbu13qa92.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.navigaurd",
+            "certificate_hash": "b2a5bc825726fdea139cc3b9dfa419bae68fca31"
+          }
+        },
+        {
+          "client_id": "1018698907487-45vj6m0nlkqcjhd3f013jkvaq5okl2e8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_lt7HmBuh002O4rL19zQqZcB0MELlW3E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1018698907487-45vj6m0nlkqcjhd3f013jkvaq5okl2e8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1018698907487-qild749as9e5oicnjaulqqnqikcomr35.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.navigaurd"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
