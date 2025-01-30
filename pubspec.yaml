@@ -52,6 +52,7 @@ dependencies:
   firebase_storage: ^12.4.1
   uuid: ^4.5.1
   smooth_page_indicator: ^1.2.0+3
+  flutter_native_splash: ^2.4.4
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +85,7 @@ flutter:
     - assets/call/
     - assets/maps/
     - assets/weather/
+    - assets/feed/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -110,3 +112,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_native_splash:
+  color: "#004AAD"
+  image: assets/splash_screen/logo.png 
+  android: true
+  ios: true
+  web: true
+  fullscreen: true

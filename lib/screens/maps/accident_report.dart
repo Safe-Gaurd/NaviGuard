@@ -53,8 +53,7 @@ class _AccidentReportScreenState extends State<AccidentReportScreen> {
     });
 
     try {
-      // Access the provider
-      final reportProvider = Provider.of<ReportDataProvider>(context, listen: false);
+      ReportDataProvider reportProvider = Provider.of(context, listen: false);
 
       // Create a new report data object
       final newReport = ReportDataModel(
@@ -67,10 +66,10 @@ class _AccidentReportScreenState extends State<AccidentReportScreen> {
 
       String id = '${widget.coordinates.latitude},${widget.coordinates.longitude}';
       // Save the report using the provider
-      res=await reportProvider.addReportDescription(
-        id: id,
-        reportEach: newReport,
-      );
+      // res=await reportProvider.addReport(
+      //   id: id,
+      //   reportEach: newReport,
+      // );
 
       if(res=="done")
       {

@@ -58,21 +58,6 @@ void initState() {
       );
     });
 
-    // Future.delayed(const Duration(seconds: 10), () {
-    //   const CustomDialog().showLogoutDialog(
-    //     context: context,
-    //     label: "Location",
-    //     message: "Allow SafeGaurd to access the location",
-    //     option1: "Allow",
-    //     onPressed1: () {
-    //       Navigator.of(context).pop();
-    //     },
-    //     option2: "Deny",
-    //     onPressed2: () {
-    //     },
-    //   );
-    // });
-
     getData();
 }
 
@@ -94,7 +79,7 @@ void getData() async {
     {
       return userProvider.isLoading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: blueColor,),
             )
           : Scaffold(
         key: _scaffoldKey,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:navigaurd/screens/onboarding/onboarding_main.dart';
+import 'package:navigaurd/screens/onboarding/splash.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/app/app_provider.dart';
 import 'package:navigaurd/screens/home/home.dart';
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
             Theme.of(context).textTheme,
           )),
         // home: const AccidentReportScreen(coordinates: LatLng(16.568821984802113, 81.52605148094995)),
-        home: OnboardingMainScreen(),
+        // home: CustomSplashScreen(),
+        home: HomeScreen(),
         debugShowCheckedModeBanner: false,
       ),
     );
