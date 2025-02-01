@@ -1,11 +1,11 @@
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:navigaurd/backend/models/report.dart';
-import 'package:navigaurd/backend/storage/firebase_storage.dart';
+import 'package:navigaurd/constants/date_time.dart';
 import 'package:navigaurd/constants/image_picker.dart';
 
 class ReportDataProvider extends ChangeNotifier {
@@ -21,64 +21,69 @@ class ReportDataProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   // Photos List
-  List<String> _photosList = [];
+  final List<String> _photosList = [];
   List<String> get photosList => _photosList;
 
-  // For handling image selection and upload
-  Uint8List? _reportImage;
-  Uint8List? get reportImage => _reportImage;
+  
+  void fetchReport() {
+  _isLoading = true;
+  notifyListeners();
 
-  String? _reportPhotoURL;
-  String? get reportPhotoURL => _reportPhotoURL;
-
-  /// Fetch reports from Firestore
-  Future<void> fetchReport() async {
-    _setLoading(true);
-    try {
-      QuerySnapshot snapshot = await _firestore.collection('reports').get();
-      _report = snapshot.docs.map((doc) => ReportDataModel.fromMap(doc)).toList();
-    } catch (e) {
-      print('Error fetching reports: $e');
-    } finally {
-      _setLoading(false);
-    }
-  }
-
-  void _setLoading(bool value) {
-    _isLoading = value;
+  _firestore.collection('reports').snapshots().listen((snapshot) {
+    _report = snapshot.docs.map((doc) => ReportDataModel.fromMap(doc)).toList();
+    _isLoading = false;
     notifyListeners();
-  }
+  }, onError: (error) {
+    print('Error fetching reports: $error');
+    _isLoading = false;
+    notifyListeners();
+  });
+}
 
-  /// Select an image
-  void selectImage(ImageSource source) async {
+
+
+  File? _reportImage;
+  File? get reportImage => _reportImage;
+
+  String? _photoURL;
+  String? get photoURL => _photoURL;
+
+  Future<void> selectImage(ImageSource source) async {
+    _isLoading=true;
     try {
-      Uint8List image = await pickImage(source);
+      print("📷 Selecting image...");
+      File? image = await CustomImagePicker(isReport: true).pickImage(source);
       _reportImage = image;
-      if (image.isNotEmpty) {
-        await generateReportUrl();
+      notifyListeners();
+
+      if (image != null) {
+        await generateProfileUrl();
       }
     } catch (e) {
-      print('Error selecting image: $e');
+      print("❌ Error selecting image: $e");
     }
-    notifyListeners();
-  }
-
-  /// Generate a URL for the selected image
-  Future<void> generateReportUrl() async {
-    if (_reportImage == null) return;
-    try {
-      _reportPhotoURL = await StorageMethods.uploadImageToStorage(
-        childName: 'report',
-        file: _reportImage!,
-      );
-      _photosList.add(_reportPhotoURL!); // Add to the photos list
+    finally {
+      _isLoading=false;
       notifyListeners();
-    } catch (e) {
-      print('Error generating report photo URL: $e');
     }
   }
 
-  /// Add a report to Firestore
+  Future<void> generateProfileUrl() async {
+    try {
+      print("⏳ Uploading image...");
+      String? imageUrl = await CustomImagePicker(isReport: true).uploadToCloudinary(isReport:true ,imageFile: reportImage);
+      print("✅ Image uploaded to Cloudinary successfully: $imageUrl");
+
+      if (imageUrl != null && imageUrl.isNotEmpty) {
+        _photoURL = imageUrl; 
+        _photosList.add(_photoURL!);
+        notifyListeners();
+      }
+    } catch (e) {
+      print("❌ Error uploading image: $e");
+    }
+  }
+
   Future<String> addReport({
     required String town,
     required String description,
@@ -91,26 +96,25 @@ class ReportDataProvider extends ChangeNotifier {
       res="";
     }
 
+    final String timeFormatted='$formattedDate, $formattedTime';
     final report = ReportDataModel(
       landMark: landMark,
       town: town,
       description: description,
       coordinates: coordinates,
-      time: DateTime.now().toString(), // You can format this as needed
+      time: timeFormatted,
       photosList: _photosList,
     );
 
     try {
-      // Use latitude and longitude as the document ID
       String documentId = '${coordinates?.latitude},${coordinates?.longitude}';
 
       await _firestore.collection('reports').doc(documentId).set(report.toMap());
       res="success";
-      // Clear the local photos list after successfully adding the report
       _photosList.clear();
       notifyListeners();
     } catch (e) {
-      print('Error adding report: $e');
+      print('Error adding report: ${e.toString()}');
     }
     return res;
   }

@@ -112,7 +112,6 @@ class FavPersonCallScreenState extends State<FavPersonCallScreen> {
           ),
         ),
       ),
-      resizeToAvoidBottomInset: false,
     );
   }
 }

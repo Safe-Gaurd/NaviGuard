@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:navigaurd/constants/colors.dart';
-import 'package:navigaurd/screens/onboarding/onboarding_main.dart';
+import 'package:navigaurd/screens/home/home.dart';
+
 
 class CustomSplashScreen extends StatefulWidget {
   const CustomSplashScreen({super.key});
@@ -21,7 +22,7 @@ void initState() {
     if (mounted) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => OnboardingMainScreen(),
+          builder: (context) => HomeScreen(),
         ),
       );
     }

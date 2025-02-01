@@ -13,7 +13,7 @@ import 'package:navigaurd/screens/notifications/notification.dart';
 import 'package:navigaurd/screens/profile/user_profile.dart';
 import 'package:navigaurd/screens/settings/settings.dart';
 import 'package:navigaurd/screens/support&help/help.dart';
-import 'package:navigaurd/constants/dialog.dart';
+import 'package:navigaurd/constants/logout_dialog.dart';
 import 'package:navigaurd/screens/widgets/appbar.dart';
 
 class HomeScreen extends StatefulWidget {
