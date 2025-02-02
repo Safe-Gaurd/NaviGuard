@@ -11,12 +11,10 @@ class UserProvider extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   UserModel? _user;
   UserModel get user => _user!;
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool get isLoading => _isLoading;
 
   Future<void> fetchUser() async {
-    _isLoading = true;
-    notifyListeners();
     try {
       print("📥 Fetching user data...");
       var snap = await _firestore.collection('users').doc(uid).get();
@@ -24,9 +22,8 @@ class UserProvider extends ChangeNotifier {
       print("✅ User data fetched successfully!");
     } catch (e) {
       print("❌ Error fetching user data: $e");
-    }
-    finally {
-      _isLoading=false;
+    } finally {
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -38,7 +35,7 @@ class UserProvider extends ChangeNotifier {
   String? get photoURL => _photoURL;
 
   Future<void> selectImage(ImageSource source) async {
-    _isLoading=true;
+    _isLoading = true;
     notifyListeners();
     try {
       print("📷 Selecting image...");
@@ -51,9 +48,8 @@ class UserProvider extends ChangeNotifier {
       }
     } catch (e) {
       print("❌ Error selecting image: $e");
-    }
-    finally {
-      _isLoading=false;
+    } finally {
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -61,11 +57,12 @@ class UserProvider extends ChangeNotifier {
   Future<void> generateProfileUrl() async {
     try {
       print("⏳ Uploading image...");
-      String? imageUrl = await CustomImagePicker(isReport: false).uploadToCloudinary(isReport:false ,imageFile: profileImage);
+      String? imageUrl = await CustomImagePicker(isReport: false)
+          .uploadToCloudinary(isReport: false, imageFile: profileImage);
       print("✅ Image uploaded to Cloudinary successfully: $imageUrl");
 
       if (imageUrl != null && imageUrl.isNotEmpty) {
-        _photoURL = imageUrl; 
+        _photoURL = imageUrl;
         notifyListeners();
       }
     } catch (e) {
@@ -83,15 +80,14 @@ class UserProvider extends ChangeNotifier {
     required String location,
   }) async {
     String res = '';
-    
-    try {
 
+    try {
       final updatedUser = UserModel(
         uid: uid,
         name: name,
         email: email,
         phonenumber: phonenumber,
-        photoURL: photoURL, 
+        photoURL: photoURL,
         location: location,
       );
 
@@ -106,7 +102,6 @@ class UserProvider extends ChangeNotifier {
 
       await fetchUser();
       notifyListeners();
-
     } catch (error) {
       res = error.toString();
       print("❌ Error updating user details: $error");

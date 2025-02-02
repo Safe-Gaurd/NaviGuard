@@ -7,7 +7,7 @@
     <application
         android:label="navigaurd"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyBv1o-cuntMSuaJ4Pee_PDj8-paUwgBVps"/>
                <!-- backup-key="AIzaSyDZQnlS-lKf3UzmZY4OzPh5cP2XT4meti4" -->
