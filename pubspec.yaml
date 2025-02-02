@@ -61,6 +61,7 @@ dependencies:
   video_player: ^2.9.2
   geolocator: ^13.0.2
   flutter_polyline_points: ^2.1.0
+  file_picker: ^8.3.1
 
 
 dev_dependencies:

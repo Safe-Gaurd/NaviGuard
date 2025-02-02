@@ -9,6 +9,7 @@ import 'package:navigaurd/screens/support&help/help.dart';
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String label;
   final TextStyle? style;
+  
 
   const CustomAppbar({
     super.key,

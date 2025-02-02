@@ -3,8 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigaurd/constants/colors.dart';
+import 'package:navigaurd/screens/dash_cam/dash_cam.dart';
 import 'package:navigaurd/screens/feed_sub_screens/old_dash_cam.dart';
 import 'package:navigaurd/screens/maps/button.dart';
+import 'package:navigaurd/screens/maps/maps.dart';
 import 'package:navigaurd/screens/onboarding/onboarding_main.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/app/app_provider.dart';
@@ -32,28 +34,28 @@ class MyApp extends StatelessWidget {
             textTheme: GoogleFonts.dmSansTextTheme(
           Theme.of(context).textTheme,
         )),
-        // home: ButtonScreen(),
-        // home: CustomSplashScreen(),
-        home: StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return const HomeScreen();
-              } else if (snapshot.hasError) {
-                return const Center(
-                  child: Text("error will loading the data"),
-                );
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: blueColor,
-                  ),
-                );
-              }
+        home: HomeScreen(),
+        // home: DashcamScreen(),
+        // home: StreamBuilder(
+        //     stream: FirebaseAuth.instance.authStateChanges(),
+        //     builder: (context, snapshot) {
+        //       if (snapshot.hasData) {
+        //         return const HomeScreen();
+        //       } else if (snapshot.hasError) {
+        //         return const Center(
+        //           child: Text("error will loading the data"),
+        //         );
+        //       }
+        //       if (snapshot.connectionState == ConnectionState.waiting) {
+        //         return const Center(
+        //           child: CircularProgressIndicator(
+        //             color: blueColor,
+        //           ),
+        //         );
+        //       }
 
-              return const OnboardingMainScreen();
-            }),
+        //       return const OnboardingMainScreen();
+        //     }),
 
         debugShowCheckedModeBanner: false,
       ),

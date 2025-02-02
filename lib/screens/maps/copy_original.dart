@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:http/http.dart' as http;
 import 'package:navigaurd/constants/colors.dart';
-import 'package:navigaurd/constants/toast.dart';
 import 'package:navigaurd/screens/maps/accident_report.dart';
 import 'package:navigaurd/screens/maps/button.dart';
 import 'package:navigaurd/screens/widgets/buttons/elevated.dart';
@@ -24,6 +22,7 @@ class _MapScreenState extends State<MapScreen> {
   );
 
   bool isMapLoading = false;
+
   late GoogleMapController _googleMapController;
   Marker? _origin;
   Marker? _destination;
@@ -32,9 +31,6 @@ class _MapScreenState extends State<MapScreen> {
   String _distance = "";
   String _duration = "";
   Completer<GoogleMapController> mapController = Completer();
-  StreamSubscription? _positionStreamSubscription;
-  Position? _lastPosition;
-  String _responseText="";
 
   @override
   void initState() {
@@ -42,7 +38,7 @@ class _MapScreenState extends State<MapScreen> {
     getUserLocation();
   }
 
-  // Function to get user location and listen for changes
+  // Function to get user location
   Future<void> getUserLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -65,70 +61,25 @@ class _MapScreenState extends State<MapScreen> {
       return Future.error('Location permissions are permanently denied.');
     }
 
-    // Listen to location updates
-    _positionStreamSubscription = Geolocator.getPositionStream(
-      locationSettings: LocationSettings(
-      accuracy: LocationAccuracy.high,  // This is the new way to set accuracy
-      distanceFilter: 10, // Only updates every 10 meters of movement
-    ),
-    ).listen((Position position) {
-      // Only call the function if the position has changed
-      if (_lastPosition == null ||
-          _lastPosition!.latitude != position.latitude ||
-          _lastPosition!.longitude != position.longitude) {
-        _lastPosition = position;
-        _sendRequestToModel(position.latitude, position.longitude);
-      }
-    });
+    // Get the user's current location
+    updateMapData();
   }
 
-  // Function to send request to the model when location changes
-  Future<void> _sendRequestToModel(double latitude, double longitude) async {
-    final url = "https://navigaurd-ml-model.onrender.com/predict";
-    final requestBody = jsonEncode({'latitude': latitude, 'longitude': longitude});
+  void updateMapData() async {
+    setState(() {
+      isMapLoading = true;
+    });
 
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: requestBody,
-      );
+    // Simulating some loading time for the map data update
+    await Future.delayed(Duration(seconds: 2));
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          _responseText = "Slow Region: ${data['slow_region']}, Group: ${data['group']}";
-        });
-
-        // Ensure that the toast is displayed after the UI is updated
-        if (data['slow_region'].contains("1")) {
-          toastMessage(
-            context: context,
-            message: "There is a ${data['group']} NearBy. Please Go Slow",
-            leadingIcon: const Icon(Icons.message),
-            toastColor: Colors.yellow[300],
-            borderColor: Colors.orange,
-            position: DelightSnackbarPosition.top
-          );
-        }
-      } else {
-        setState(() {
-          _responseText = "Request failed: ${response.statusCode}";
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _responseText = "Error: $e";
-      });
-    }
-
-    print(_responseText);
+    setState(() {
+      isMapLoading = false;
+    });
   }
 
   @override
   void dispose() {
-    // Cancel location stream when widget is disposed
-    _positionStreamSubscription?.cancel();
     _googleMapController.dispose();
     super.dispose();
   }

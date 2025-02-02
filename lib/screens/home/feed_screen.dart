@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:navigaurd/screens/dash_cam/dash_cam.dart';
 import 'package:navigaurd/screens/feed_sub_screens/old_dash_cam.dart';
 import 'package:navigaurd/screens/feed_sub_screens/insurance.dart';
 import 'package:navigaurd/screens/feed_sub_screens/weather_short_cut.dart';
@@ -16,7 +17,6 @@ import 'package:navigaurd/screens/feed_sub_screens/phone_call.dart';
 import 'package:navigaurd/screens/feed_sub_screens/report_analysis.dart';
 import 'package:navigaurd/screens/feed_sub_screens/weather.dart';
 import 'package:navigaurd/screens/home/widgets/custom_card_button.dart';
-import 'package:navigaurd/screens/maps/old_map.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -253,7 +253,7 @@ class FeedScreenState extends State<FeedScreen> {
             title: "Start Journey",
             imagePath: "assets/home/maps.jpg",
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => OpenSourceMapScreen())),
+                builder: (context) => MapScreen())),
             gradient: LinearGradient(colors: [Colors.green[300]!, Colors.green[600]!]),
           ),
           CustomCardButton(

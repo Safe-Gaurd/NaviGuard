@@ -110,4 +110,43 @@ class UserProvider extends ChangeNotifier {
 
     return res;
   }
+
+
+  Future<void> uploadVideo({
+    required String videoURL,
+    required String timestamp, // Use DateTime instead of String for timestamp
+  }) async {
+    try {
+      await _firestore.collection('users').doc(uid).collection('recordings').add({
+        'timestamp': timestamp,
+        'videoURL': videoURL,
+      });
+      print("✅ Video added to Firestore successfully!");
+      notifyListeners();
+    } catch (e) {
+      print("❌ Error adding video: $e");
+    }
+  }
+
+  final List<String> _videosList = [];
+  List<String> get videosList => _videosList;
+
+ void listenToVideos() {
+  try {
+    print("📡 Listening to video updates...");
+    _firestore.collection('users').doc(uid).collection('recordings').snapshots().listen((snap) {
+      _videosList.clear(); // Clear existing list before updating
+
+      for (var doc in snap.docs) {
+        _videosList.add(doc['videoURL']);
+      }
+
+      print("✅ Video list updated in real-time!");
+      notifyListeners(); // Notify UI about the change
+    });
+  } catch (e) {
+    print("❌ Error listening to video updates: $e");
+  }
+}
+
 }

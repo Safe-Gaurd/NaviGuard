@@ -1,5 +1,6 @@
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
+import 'package:navigaurd/screens/maps/maps.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/backend/auth/auth_methods.dart';
 import 'package:navigaurd/backend/providers/user_provider.dart';
@@ -7,8 +8,8 @@ import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
 import 'package:navigaurd/screens/auth/login.dart';
 import 'package:navigaurd/screens/home/feed_screen.dart';
+import 'package:navigaurd/screens/home/small_ui_feed.dart';
 import 'package:navigaurd/screens/home/widgets/navbaritems.dart';
-import 'package:navigaurd/screens/maps/old_map.dart';
 import 'package:navigaurd/screens/notifications/notification.dart';
 import 'package:navigaurd/screens/profile/user_profile.dart';
 import 'package:navigaurd/screens/settings/settings.dart';
@@ -70,7 +71,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> screens = [
     const FeedScreen(),
-    const MapScreen(),
+    MapScreen(),
     const UserProfileScreen(),
   ];
 
