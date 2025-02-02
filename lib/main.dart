@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:navigaurd/screens/feed_sub_screens/dash_cam.dart';
+import 'package:navigaurd/screens/feed_sub_screens/old_dash_cam.dart';
+import 'package:navigaurd/screens/onboarding/old_splash.dart';
+import 'package:navigaurd/screens/onboarding/splash.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/app/app_provider.dart';
 import 'package:navigaurd/screens/home/home.dart';
@@ -28,10 +30,8 @@ class MyApp extends StatelessWidget {
               textTheme: GoogleFonts.dmSansTextTheme(
             Theme.of(context).textTheme,
           )),
-        // home: const AccidentReportScreen(coordinates: LatLng(16.568821984802113, 81.52605148094995)),
-        // home: CustomSplashScreen(),
-        home: HomeScreen(),
-        // home: ImageUploader(),
+        home: CustomSplashScreen(),
+        // home: HomeScreen(),
         debugShowCheckedModeBanner: false,
       ),
     );

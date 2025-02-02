@@ -8,7 +8,7 @@ import 'package:navigaurd/constants/toast.dart';
 import 'package:navigaurd/screens/auth/login.dart';
 import 'package:navigaurd/screens/home/feed_screen.dart';
 import 'package:navigaurd/screens/home/widgets/navbaritems.dart';
-import 'package:navigaurd/screens/maps/map.dart';
+import 'package:navigaurd/screens/maps/old_map.dart';
 import 'package:navigaurd/screens/notifications/notification.dart';
 import 'package:navigaurd/screens/profile/user_profile.dart';
 import 'package:navigaurd/screens/settings/settings.dart';
@@ -42,21 +42,21 @@ void initState() {
       );
     }
 
-    // Delayed execution for dialogs
-    Future.delayed(const Duration(seconds: 1), () {
-      const CustomDialog().showLogoutDialog(
-        context: context,
-        label: "Notifications",
-        message: "Allow SafeGaurd to send notifications",
-        option1: "Allow",
-        onPressed1: () {
-          Navigator.of(context).pop();
-        },
-        option2: "Deny",
-        onPressed2: () {
-        },
-      );
-    });
+    // // Delayed execution for dialogs
+    // Future.delayed(const Duration(seconds: 1), () {
+    //   const CustomDialog().showLogoutDialog(
+    //     context: context,
+    //     label: "Notifications",
+    //     message: "Allow SafeGaurd to send notifications",
+    //     option1: "Allow",
+    //     onPressed1: () {
+    //       Navigator.of(context).pop();
+    //     },
+    //     option2: "Deny",
+    //     onPressed2: () {
+    //     },
+    //   );
+    // });
 
     getData();
 }
