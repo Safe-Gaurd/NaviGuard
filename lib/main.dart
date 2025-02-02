@@ -5,9 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/screens/feed_sub_screens/old_dash_cam.dart';
 import 'package:navigaurd/screens/maps/button.dart';
-import 'package:navigaurd/screens/onboarding/old_splash.dart';
 import 'package:navigaurd/screens/onboarding/onboarding_main.dart';
-import 'package:navigaurd/screens/onboarding/splash.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/app/app_provider.dart';
 import 'package:navigaurd/screens/home/home.dart';
@@ -35,7 +33,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         )),
         // home: ButtonScreen(),
-        // home: HomeScreen(),
+        // home: CustomSplashScreen(),
         home: StreamBuilder(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {

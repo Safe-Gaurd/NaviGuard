@@ -90,7 +90,7 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(label: "Insurance SignUp"),
+      appBar: CustomAppbar(label: "Insurance"),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

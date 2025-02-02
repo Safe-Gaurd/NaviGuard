@@ -26,7 +26,7 @@ class _ReportAnalysisScreenState extends State<ReportAnalysisScreen> {
     final reports = reportProvider.report;
 
     return Scaffold(
-      appBar: const CustomAppbar(label: "Accident Reports Analysis"),
+      appBar: const CustomAppbar(label: "Reports"),
       body: reportProvider.isLoading
           ? const Center(child: CircularProgressIndicator(color: blueColor))
           : reports == null
