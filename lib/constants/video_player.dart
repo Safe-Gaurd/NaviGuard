@@ -4,10 +4,10 @@ import 'package:video_player/video_player.dart';
 class VideoPlayerScreen extends StatefulWidget {
   final String videoURL;
 
-  VideoPlayerScreen({required this.videoURL});
+  const VideoPlayerScreen({super.key, required this.videoURL});
 
   @override
-  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
+  State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
 }
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
@@ -39,7 +39,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       body: Center(
         child: _controller.value.isInitialized
             ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
+                aspectRatio: 1,
                 child: VideoPlayer(_controller),
               )
             : CircularProgressIndicator(),

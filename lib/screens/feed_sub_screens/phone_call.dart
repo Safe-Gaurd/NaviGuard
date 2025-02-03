@@ -3,12 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:direct_caller_sim_choice/direct_caller_sim_choice.dart';
 import 'package:navigaurd/constants/toast.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/screens/feed_sub_screens/fav_person_call.dart';
-import 'package:navigaurd/screens/home/home.dart';
 import 'package:navigaurd/screens/home/widgets/custom_card_button.dart';
-import 'package:navigaurd/screens/notifications/notification.dart';
-import 'package:navigaurd/screens/support&help/help.dart';
 import 'package:navigaurd/screens/widgets/appbar.dart';
 
 class PhoneCallScreen extends StatelessWidget {
@@ -20,7 +16,7 @@ class PhoneCallScreen extends StatelessWidget {
     var status = await Permission.phone.request();
 
     if (status.isGranted) {
-      DirectCaller().makePhoneCall(phoneNumber);
+      DirectCaller().makePhoneCall('+91$phoneNumber');
     } else {
       toastMessage(
           context: context,

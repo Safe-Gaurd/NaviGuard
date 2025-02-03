@@ -5,8 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:navigaurd/constants/toast.dart';
 
 class MapButtonScreen extends StatefulWidget {
+  const MapButtonScreen({super.key});
+
   @override
-  _MapButtonScreenState createState() => _MapButtonScreenState();
+  State<MapButtonScreen> createState() => _MapButtonScreenState();
 }
 
 class _MapButtonScreenState extends State<MapButtonScreen> {

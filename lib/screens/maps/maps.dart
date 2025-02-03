@@ -9,12 +9,13 @@ import 'package:http/http.dart' as http;
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
 import 'package:navigaurd/screens/maps/accident_report.dart';
-import 'package:navigaurd/screens/maps/button.dart';
 import 'package:navigaurd/screens/widgets/buttons/elevated.dart';
 
 class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
   @override
-  _MapScreenState createState() => _MapScreenState();
+  State<MapScreen> createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
@@ -23,7 +24,7 @@ class _MapScreenState extends State<MapScreen> {
     zoom: 12.5,
   );
 
-  bool isMapLoading = false;
+  bool isMapLoading = true;
   late GoogleMapController _googleMapController;
   Marker? _origin;
   Marker? _destination;
@@ -34,7 +35,7 @@ class _MapScreenState extends State<MapScreen> {
   Completer<GoogleMapController> mapController = Completer();
   StreamSubscription? _positionStreamSubscription;
   Position? _lastPosition;
-  String _responseText="";
+  String _responseText = "";
 
   @override
   void initState() {
@@ -65,12 +66,16 @@ class _MapScreenState extends State<MapScreen> {
       return Future.error('Location permissions are permanently denied.');
     }
 
+    setState(() {
+      isMapLoading=false;
+    });
+
     // Listen to location updates
     _positionStreamSubscription = Geolocator.getPositionStream(
       locationSettings: LocationSettings(
-      accuracy: LocationAccuracy.high,  // This is the new way to set accuracy
-      distanceFilter: 10, // Only updates every 10 meters of movement
-    ),
+        accuracy: LocationAccuracy.high, // This is the new way to set accuracy
+        distanceFilter: 10, // Only updates every 10 meters of movement
+      ),
     ).listen((Position position) {
       // Only call the function if the position has changed
       if (_lastPosition == null ||
@@ -108,7 +113,7 @@ class _MapScreenState extends State<MapScreen> {
             leadingIcon: const Icon(Icons.message),
             toastColor: Colors.yellow[300],
             borderColor: Colors.orange,
-            position: DelightSnackbarPosition.top
+            position: DelightSnackbarPosition.top,
           );
         }
       } else {
@@ -150,7 +155,7 @@ class _MapScreenState extends State<MapScreen> {
               style: TextButton.styleFrom(backgroundColor: Colors.green),
               child: const Text('Source', style: TextStyle(color: Colors.white)),
             ),
-            SizedBox(width: 20,),
+          SizedBox(width: 20),
           if (_destination != null)
             TextButton(
               onPressed: () => _googleMapController.animateCamera(
@@ -238,8 +243,15 @@ class _MapScreenState extends State<MapScreen> {
       ),
       floatingActionButton: CustomElevatedButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => MapButtonScreen()));
-        }, 
+          // Pass the current user's live coordinates to the AccidentReportScreen
+          if (_lastPosition != null) {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => AccidentReportScreen(
+                coordinates: LatLng(_lastPosition!.latitude, _lastPosition!.longitude),
+              ),
+            ));
+          }
+        },
         foregroundColor: backgroundColor,
         backgroundColor: blueColor,
         text: "Report An Accident",

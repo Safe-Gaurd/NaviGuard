@@ -1,3 +1,4 @@
+import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
@@ -44,6 +45,7 @@ class SignupScreenState extends State<SignupScreen> {
           leadingIcon: const Icon(Icons.message),
           toastColor: Colors.yellow[300],
           borderColor: Colors.orange,
+          position: DelightSnackbarPosition.top
       );
       return;
     }
@@ -71,6 +73,7 @@ class SignupScreenState extends State<SignupScreen> {
           leadingIcon: const Icon(Icons.message),
           toastColor: Colors.yellow[300],
           borderColor: Colors.orange,
+          position: DelightSnackbarPosition.top
         );
       }
     } catch (e) {
@@ -80,6 +83,7 @@ class SignupScreenState extends State<SignupScreen> {
         leadingIcon: const Icon(Icons.error),
         toastColor: Colors.red[200],
         borderColor: Colors.red,
+        position: DelightSnackbarPosition.top
       );
     } finally {
       setState(() {
@@ -91,6 +95,7 @@ class SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

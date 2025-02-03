@@ -3,10 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigaurd/constants/colors.dart';
-import 'package:navigaurd/screens/dash_cam/dash_cam.dart';
-import 'package:navigaurd/screens/feed_sub_screens/old_dash_cam.dart';
-import 'package:navigaurd/screens/maps/button.dart';
-import 'package:navigaurd/screens/maps/maps.dart';
 import 'package:navigaurd/screens/onboarding/onboarding_main.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/app/app_provider.dart';
@@ -17,9 +13,7 @@ void main() async {
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
-// void main(){
-//   runApp(const MyApp());
-// }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -34,8 +28,8 @@ class MyApp extends StatelessWidget {
             textTheme: GoogleFonts.dmSansTextTheme(
           Theme.of(context).textTheme,
         )),
-        home: HomeScreen(),
-        // home: DashcamScreen(),
+        // home: HomeScreen(),
+        home: OnboardingMainScreen(),
         // home: StreamBuilder(
         //     stream: FirebaseAuth.instance.authStateChanges(),
         //     builder: (context, snapshot) {
@@ -62,3 +56,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+  

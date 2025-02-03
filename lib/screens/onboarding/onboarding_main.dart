@@ -83,7 +83,7 @@ class OnboardingMainScreenState extends State<OnboardingMainScreen> {
           isLastPage
           ? Positioned(
             bottom: 25,
-            left: 150,
+            left: 135,
             child: CustomElevatedButton(
                           backgroundColor: Colors.teal,
                           foregroundColor: Colors.white,

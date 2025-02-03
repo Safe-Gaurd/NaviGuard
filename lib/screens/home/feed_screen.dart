@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:navigaurd/screens/dash_cam/dash_cam.dart';
-import 'package:navigaurd/screens/feed_sub_screens/old_dash_cam.dart';
 import 'package:navigaurd/screens/feed_sub_screens/insurance.dart';
 import 'package:navigaurd/screens/feed_sub_screens/weather_short_cut.dart';
 import 'package:navigaurd/screens/home/widgets/adv_container.dart';
@@ -235,7 +234,7 @@ class FeedScreenState extends State<FeedScreen> {
 
   Widget customCard(BuildContext context) {
     return SizedBox(
-      height: 600,
+      height: 500,
       child: GridView.count(
         crossAxisCount: 2,
         mainAxisSpacing: 15,

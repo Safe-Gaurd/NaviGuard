@@ -1,6 +1,5 @@
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:navigaurd/backend/auth/auth_methods.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';

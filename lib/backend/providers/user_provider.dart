@@ -128,8 +128,8 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  final List<String> _videosList = [];
-  List<String> get videosList => _videosList;
+  final List<Map<String, String>> _videosList = [];
+  List<Map<String, String>> get videosList => _videosList;
 
  void listenToVideos() {
   try {
@@ -138,7 +138,11 @@ class UserProvider extends ChangeNotifier {
       _videosList.clear(); // Clear existing list before updating
 
       for (var doc in snap.docs) {
-        _videosList.add(doc['videoURL']);
+        // Add the timestamp and videoURL as a Map
+        _videosList.add({
+          'timestamp': doc['timestamp'],
+          'videoURL': doc['videoURL']
+        });
       }
 
       print("✅ Video list updated in real-time!");

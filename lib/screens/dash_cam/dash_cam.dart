@@ -8,7 +8,7 @@ class DashcamScreen extends StatefulWidget {
   const DashcamScreen({super.key});
 
   @override
-  _DashcamScreenState createState() => _DashcamScreenState();
+  State<DashcamScreen> createState() => _DashcamScreenState();
 }
 
 class _DashcamScreenState extends State<DashcamScreen> {

@@ -6,13 +6,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:http/http.dart' as http;
 import 'package:navigaurd/constants/colors.dart';
-import 'package:navigaurd/screens/maps/accident_report.dart';
 import 'package:navigaurd/screens/maps/button.dart';
 import 'package:navigaurd/screens/widgets/buttons/elevated.dart';
 
 class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
   @override
-  _MapScreenState createState() => _MapScreenState();
+  State<MapScreen> createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
