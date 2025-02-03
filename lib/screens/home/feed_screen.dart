@@ -28,7 +28,8 @@ class FeedScreen extends StatefulWidget {
 class FeedScreenState extends State<FeedScreen> {
   late WeatherModel weatherInfo;
   bool isLoading = false;
-  String weatherMessage = 'The weather is clear and perfect for driving. Enjoy the sunshine!';
+  String weatherMessage =
+      'The weather is clear and perfect for driving. Enjoy the sunshine!';
   String weatherImagePath = 'assets/home/sunny.jpg';
   final PageController controller = PageController(initialPage: 0);
   Timer? timer;
@@ -36,7 +37,7 @@ class FeedScreenState extends State<FeedScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     weatherInfo = WeatherModel(
       name: '',
       temperature: Temperature(current: 21.00),
@@ -48,14 +49,14 @@ class FeedScreenState extends State<FeedScreen> {
       seaLevel: 0,
       weather: [],
     );
-    
+
     fetchWeather();
-    
+
     timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       if (controller.hasClients) {
         int nextPage = controller.page!.toInt() + 1;
         if (nextPage >= 4) {
-          nextPage = 0; 
+          nextPage = 0;
         }
         controller.animateToPage(
           nextPage,
@@ -75,7 +76,7 @@ class FeedScreenState extends State<FeedScreen> {
         updateWeatherMessage();
       });
     } catch (e) {
-        print(e.toString());
+      print(e.toString());
     } finally {
       setState(() => isLoading = false);
     }
@@ -85,13 +86,16 @@ class FeedScreenState extends State<FeedScreen> {
     if (weatherInfo.weather.isEmpty) return;
     String weatherCondition = weatherInfo.weather[0].main.toLowerCase();
     if (weatherCondition.contains('clouds')) {
-      weatherMessage = "It's a cloudy day, but still good for driving. Stay cozy!";
+      weatherMessage =
+          "It's a cloudy day, but still good for driving. Stay cozy!";
       weatherImagePath = "assets/home/cloudy.jpg";
     } else if (weatherCondition.contains('rain')) {
-      weatherMessage = "It's rainy outside. Drive carefully and keep your headlights on!";
+      weatherMessage =
+          "It's rainy outside. Drive carefully and keep your headlights on!";
       weatherImagePath = "assets/home/rainy.jpg";
     } else {
-      weatherMessage = "The weather is clear and perfect for driving. Enjoy the sunshine!";
+      weatherMessage =
+          "The weather is clear and perfect for driving. Enjoy the sunshine!";
       weatherImagePath = "assets/home/sunny.jpg";
     }
   }
@@ -169,9 +173,7 @@ class FeedScreenState extends State<FeedScreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 20),
-                    
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: SizedBox(
@@ -188,7 +190,6 @@ class FeedScreenState extends State<FeedScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    
                     SmoothPageIndicator(
                       controller: controller,
                       count: 4,
@@ -201,16 +202,13 @@ class FeedScreenState extends State<FeedScreen> {
                         );
                       },
                     ),
-
                     const SizedBox(height: 20),
-
                     isLoading
                         ? const Center(child: CircularProgressIndicator())
                         : WeatherWidget(
-                            weatherCondition:
-                                weatherInfo.weather.isNotEmpty
-                                    ? weatherInfo.weather[0].main
-                                    : "Sunny",
+                            weatherCondition: weatherInfo.weather.isNotEmpty
+                                ? weatherInfo.weather[0].main
+                                : "Sunny",
                             temperature:
                                 "${weatherInfo.temperature.current.toStringAsFixed(2)}°C",
                             date: formattedDate,
@@ -218,9 +216,7 @@ class FeedScreenState extends State<FeedScreen> {
                             backgroundColor: Colors.white,
                             iconPath: weatherImagePath,
                           ),
-                    
                     const SizedBox(height: 20),
-                    
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: customCard(context),
@@ -234,7 +230,7 @@ class FeedScreenState extends State<FeedScreen> {
 
   Widget customCard(BuildContext context) {
     return SizedBox(
-      height: 500,
+      height: 550,
       child: GridView.count(
         crossAxisCount: 2,
         mainAxisSpacing: 15,
@@ -244,45 +240,50 @@ class FeedScreenState extends State<FeedScreen> {
           CustomCardButton(
             title: "Weather",
             imagePath: "assets/home/weather.JPG",
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const WeatherScreen())),
-            gradient: LinearGradient(colors: [Colors.blue[300]!, Colors.blue[600]!]),
+            onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const WeatherScreen())),
+            gradient:
+                LinearGradient(colors: [Colors.blue[300]!, Colors.blue[600]!]),
           ),
           CustomCardButton(
             title: "Start Journey",
             imagePath: "assets/home/maps.jpg",
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => MapScreen())),
-            gradient: LinearGradient(colors: [Colors.green[300]!, Colors.green[600]!]),
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => MapScreen())),
+            gradient: LinearGradient(
+                colors: [Colors.green[300]!, Colors.green[600]!]),
           ),
           CustomCardButton(
             title: "DashCam",
             imagePath: "assets/home/dashcam.jpg",
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const DashcamScreen())),
-            gradient: LinearGradient(colors: [Colors.purple[300]!, Colors.pink[400]!]),
+            onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const DashcamScreen())),
+            gradient: LinearGradient(
+                colors: [Colors.purple[300]!, Colors.pink[400]!]),
           ),
           CustomCardButton(
             title: "Reports Analysis",
             imagePath: "assets/home/accident_analysis.jpg",
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const ReportAnalysisScreen())),
-            gradient: LinearGradient(colors: [Colors.orange[300]!, Colors.orange[600]!]),
+            gradient: LinearGradient(
+                colors: [Colors.orange[300]!, Colors.orange[600]!]),
           ),
           CustomCardButton(
             title: "Emergency",
             imagePath: "assets/home/emergency.jpg",
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const PhoneCallScreen())),
-            gradient: LinearGradient(colors: [Colors.red[300]!, Colors.red[600]!]),
+            gradient:
+                LinearGradient(colors: [Colors.red[300]!, Colors.red[600]!]),
           ),
-          
           CustomCardButton(
             title: "Insurance",
             imagePath: "assets/home/insurance.jpg",
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const InsuranceScreen())),
-            gradient: LinearGradient(colors: [Colors.indigo[300]!, Colors.purple[600]!]),
+            gradient: LinearGradient(
+                colors: [Colors.indigo[300]!, Colors.purple[600]!]),
           ),
         ],
       ),

@@ -19,7 +19,7 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
   final TextEditingController dob = TextEditingController();
   final TextEditingController insuranceType = TextEditingController();
 
-  bool obscureText=false;
+  bool obscureText = false;
   bool isLoading = false;
 
   final formKey = GlobalKey<FormState>();
@@ -50,7 +50,7 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
       //   dob: dob.text.trim(),
       //   insuranceType: insuranceType.text.trim(),
       // );
-      String res="";
+      String res = "";
 
       if (res == "") {
         toastMessage(
@@ -109,7 +109,8 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
                       ),
                       Text(
                         "ecure your future with the right\n insurance today",
-                        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -125,7 +126,9 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
                     hinttext: "Enter Your Name",
                     controller: name,
                     prefixicon: Icons.person_2,
-                    validator: (value) => value == null || value.isEmpty ? 'Name is required' : null,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Name is required'
+                        : null,
                   ),
                   CustomTextFormField(
                     label: "Email",
@@ -135,7 +138,8 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Email is required';
-                      } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                          .hasMatch(value)) {
                         return 'Enter a valid email';
                       }
                       return null;
@@ -153,7 +157,9 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
                           obscureText = !obscureText;
                         });
                       },
-                      icon: Icon(obscureText ? Icons.visibility : Icons.visibility_off),
+                      icon: Icon(obscureText
+                          ? Icons.visibility
+                          : Icons.visibility_off),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -170,14 +176,19 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
                     controller: phonenum,
                     prefixicon: Icons.phone,
                     keyboard: TextInputType.phone,
-                    validator: (value) => value == null || value.isEmpty || value.length < 10 ? 'Please enter a valid phone number' : null,
+                    validator: (value) =>
+                        value == null || value.isEmpty || value.length < 10
+                            ? 'Please enter a valid phone number'
+                            : null,
                   ),
                   CustomTextFormField(
                     label: "Address",
                     hinttext: "Enter Your Address",
                     controller: address,
                     prefixicon: Icons.home,
-                    validator: (value) => value == null || value.isEmpty ? 'Address is required' : null,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Address is required'
+                        : null,
                   ),
                   CustomTextFormField(
                     label: "Date of Birth",
@@ -185,16 +196,19 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
                     controller: dob,
                     prefixicon: Icons.calendar_today,
                     keyboard: TextInputType.datetime,
-                    validator: (value) => value == null || value.isEmpty ? 'Date of birth is required' : null,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Date of birth is required'
+                        : null,
                   ),
                   CustomTextFormField(
                     label: "Insurance Type",
                     hinttext: "Enter Type of Insurance",
                     controller: insuranceType,
                     prefixicon: Icons.security,
-                    validator: (value) => value == null || value.isEmpty ? 'Insurance type is required' : null,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Insurance type is required'
+                        : null,
                   ),
-
                 ],
               ),
             ),

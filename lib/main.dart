@@ -14,7 +14,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -28,32 +27,30 @@ class MyApp extends StatelessWidget {
             textTheme: GoogleFonts.dmSansTextTheme(
           Theme.of(context).textTheme,
         )),
-        // home: HomeScreen(),
-        home: OnboardingMainScreen(),
-        // home: StreamBuilder(
-        //     stream: FirebaseAuth.instance.authStateChanges(),
-        //     builder: (context, snapshot) {
-        //       if (snapshot.hasData) {
-        //         return const HomeScreen();
-        //       } else if (snapshot.hasError) {
-        //         return const Center(
-        //           child: Text("error will loading the data"),
-        //         );
-        //       }
-        //       if (snapshot.connectionState == ConnectionState.waiting) {
-        //         return const Center(
-        //           child: CircularProgressIndicator(
-        //             color: blueColor,
-        //           ),
-        //         );
-        //       }
+        // home: OnboardingMainScreen(),
+        home: StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return const HomeScreen();
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text("error will loading the data"),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: blueColor,
+                  ),
+                );
+              }
 
-        //       return const OnboardingMainScreen();
-        //     }),
+              return const OnboardingMainScreen();
+            }),
 
         debugShowCheckedModeBanner: false,
       ),
     );
   }
 }
-  
