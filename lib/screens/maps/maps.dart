@@ -12,13 +12,15 @@ import 'package:navigaurd/screens/maps/accident_report.dart';
 import 'package:navigaurd/screens/widgets/buttons/elevated.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  LatLng? accidentCoordinates;
+
+  MapScreen({super.key, this.accidentCoordinates});
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  State<MapScreen> createState() => MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class MapScreenState extends State<MapScreen> {
   static const CameraPosition _initialCameraPosition = CameraPosition(
     target: LatLng(16.566222371638474, 81.5225554105058),
     zoom: 12.5,
@@ -67,30 +69,15 @@ class _MapScreenState extends State<MapScreen> {
     }
 
     setState(() {
-      isMapLoading=false;
-    });
-
-    // Listen to location updates
-    _positionStreamSubscription = Geolocator.getPositionStream(
-      locationSettings: LocationSettings(
-        accuracy: LocationAccuracy.high, // This is the new way to set accuracy
-        distanceFilter: 10, // Only updates every 10 meters of movement
-      ),
-    ).listen((Position position) {
-      // Only call the function if the position has changed
-      if (_lastPosition == null ||
-          _lastPosition!.latitude != position.latitude ||
-          _lastPosition!.longitude != position.longitude) {
-        _lastPosition = position;
-        _sendRequestToModel(position.latitude, position.longitude);
-      }
+      isMapLoading = false;
     });
   }
 
   // Function to send request to the model when location changes
-  Future<void> _sendRequestToModel(double latitude, double longitude) async {
+  Future<void> sendRequestToModel(double latitude, double longitude) async {
     final url = "https://navigaurd-ml-model.onrender.com/predict";
-    final requestBody = jsonEncode({'latitude': latitude, 'longitude': longitude});
+    final requestBody =
+        jsonEncode({'latitude': latitude, 'longitude': longitude});
 
     try {
       final response = await http.post(
@@ -102,7 +89,8 @@ class _MapScreenState extends State<MapScreen> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
-          _responseText = "Slow Region: ${data['slow_region']}, Group: ${data['group']}";
+          _responseText =
+              "Slow Region: ${data['slow_region']}, Group: ${data['group']}";
         });
 
         // Ensure that the toast is displayed after the UI is updated
@@ -153,7 +141,8 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
               style: TextButton.styleFrom(backgroundColor: Colors.green),
-              child: const Text('Source', style: TextStyle(color: Colors.white)),
+              child:
+                  const Text('Source', style: TextStyle(color: Colors.white)),
             ),
           SizedBox(width: 20),
           if (_destination != null)
@@ -164,7 +153,8 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
               style: TextButton.styleFrom(backgroundColor: Colors.indigo[900]),
-              child: const Text('Destination', style: TextStyle(color: Colors.white)),
+              child: const Text('Destination',
+                  style: TextStyle(color: Colors.white)),
             ),
         ],
       ),
@@ -182,9 +172,17 @@ class _MapScreenState extends State<MapScreen> {
             markers: {
               if (_origin != null) _origin!,
               if (_destination != null) _destination!,
+              if (widget.accidentCoordinates != null)
+                Marker(
+                  markerId: const MarkerId('Accident'),
+                  position: widget.accidentCoordinates!,
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueRed),
+                  infoWindow: const InfoWindow(title: 'Accident Location'),
+                ),
             },
             polylines: _polylines,
-            onLongPress: _addMarker,
+            onLongPress: addMarker,
           ),
           if (isMapLoading)
             const Center(
@@ -194,17 +192,24 @@ class _MapScreenState extends State<MapScreen> {
             Positioned(
               top: 30.0,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 decoration: BoxDecoration(
                   color: Colors.black87,
                   borderRadius: BorderRadius.circular(20.0),
                   boxShadow: const [
-                    BoxShadow(color: Colors.black26, offset: Offset(0, 2), blurRadius: 6.0),
+                    BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(0, 2),
+                        blurRadius: 6.0),
                   ],
                 ),
                 child: Text(
                   "Distance: $_distance, Duration: $_duration",
-                  style: const TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -243,14 +248,11 @@ class _MapScreenState extends State<MapScreen> {
       ),
       floatingActionButton: CustomElevatedButton(
         onPressed: () {
-          // Pass the current user's live coordinates to the AccidentReportScreen
-          if (_lastPosition != null) {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => AccidentReportScreen(
-                coordinates: LatLng(_lastPosition!.latitude, _lastPosition!.longitude),
-              ),
-            ));
-          }
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => AccidentReportScreen(
+              coordinates: LatLng(16.566222, 81.522555),
+            ),
+          ));
         },
         foregroundColor: backgroundColor,
         backgroundColor: blueColor,
@@ -259,13 +261,14 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  void _addMarker(LatLng pos) async {
+  void addMarker(LatLng pos) async {
     setState(() {
       if (_origin == null || (_origin != null && _destination != null)) {
         _origin = Marker(
           markerId: const MarkerId('origin'),
           position: pos,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
           infoWindow: const InfoWindow(title: 'Origin'),
         );
         _destination = null;
@@ -281,12 +284,12 @@ class _MapScreenState extends State<MapScreen> {
           infoWindow: const InfoWindow(title: 'Destination'),
         );
 
-        _getRoute();
+        getRoute();
       }
     });
   }
 
-  Future<void> _getRoute() async {
+  Future<void> getRoute() async {
     if (_origin == null || _destination == null) return;
 
     final originLat = _origin!.position.latitude;
@@ -304,7 +307,7 @@ class _MapScreenState extends State<MapScreen> {
       final routes = decodedData['routes'];
 
       if (routes.isNotEmpty) {
-        final route = routes[0]; 
+        final route = routes[0];
 
         final polyline = route['geometry'];
         final distanceMeters = route['legs'][0]['distance'];
@@ -332,6 +335,25 @@ class _MapScreenState extends State<MapScreen> {
           ));
         });
       }
+
+      sendRequestToModel(originLat, originLng);
+
+      // // Listen to location updates
+      // _positionStreamSubscription = Geolocator.getPositionStream(
+      //   locationSettings: LocationSettings(
+      //     accuracy:
+      //         LocationAccuracy.high, // This is the new way to set accuracy
+      //     distanceFilter: 50, // Only updates every 10 meters of movement
+      //   ),
+      // ).listen((Position position) {
+      //   // Only call the function if the position has changed
+      //   if (_lastPosition == null ||
+      //       _lastPosition!.latitude != position.latitude ||
+      //       _lastPosition!.longitude != position.longitude) {
+      //     _lastPosition = position;
+      //     sendRequestToModel(position.latitude, position.longitude);
+      //   }
+      // });
     } else {
       print("Failed to fetch route: ${response.body}");
     }

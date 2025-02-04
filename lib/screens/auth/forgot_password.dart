@@ -55,7 +55,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -63,7 +63,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 40,),
+                const SizedBox(
+                  height: 40,
+                ),
                 Image.asset(
                   'assets/auth/forgot_password.jpg',
                   height: 270,
@@ -76,7 +78,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   textAlign: TextAlign.center,
                   'Receive an Email to\nReset Your Password',
                   maxLines: 2,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: blueColor),
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: blueColor),
                 ),
                 const SizedBox(
                   height: 40,
@@ -89,7 +94,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Email is required';
-                    } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                    } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                        .hasMatch(value)) {
                       return 'Enter a valid email';
                     }
                     return null;
@@ -99,10 +105,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   height: 30,
                 ),
                 LoginSignupButtons(
-                    onTap: () => resetPassword(),
-                    label: 'Reset Password',
-                    backgroundColor: Colors.blue, 
-                    isLoading: isLoading,
+                  onTap: () => resetPassword(),
+                  label: 'Reset Password',
+                  backgroundColor: Colors.blue,
+                  isLoading: isLoading,
                 ),
               ],
             ),

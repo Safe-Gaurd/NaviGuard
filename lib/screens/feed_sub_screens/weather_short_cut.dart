@@ -22,9 +22,9 @@ class WeatherWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(
-        padding: const EdgeInsets.only(left: 16),
+        padding: const EdgeInsets.only(left: 10),
         height: 180,
         width: double.infinity,
         decoration: BoxDecoration(
@@ -65,7 +65,8 @@ class WeatherWidget extends StatelessWidget {
                 const SizedBox(height: 5),
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today, color: blueColor, size: 16),
+                    const Icon(Icons.calendar_today,
+                        color: blueColor, size: 16),
                     const SizedBox(width: 5),
                     Text(
                       date,

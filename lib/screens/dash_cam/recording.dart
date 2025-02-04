@@ -4,6 +4,7 @@ import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:navigaurd/backend/providers/user_provider.dart';
+import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
 import 'package:navigaurd/constants/video_url_generator.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,8 @@ class _RecordingScreenState extends State<RecordingScreen> {
   Future<void> _initializeCamera() async {
     cameras = await availableCameras();
     if (cameras != null && cameras!.isNotEmpty) {
-      _cameraController = CameraController(cameras![0], ResolutionPreset.medium);
+      _cameraController =
+          CameraController(cameras![0], ResolutionPreset.medium);
       await _cameraController!.initialize();
       if (mounted) setState(() {});
     }
@@ -53,11 +55,13 @@ class _RecordingScreenState extends State<RecordingScreen> {
   }
 
   Future<void> _stopRecording() async {
-    if (_cameraController != null && _cameraController!.value.isRecordingVideo) {
+    if (_cameraController != null &&
+        _cameraController!.value.isRecordingVideo) {
       XFile videoFile = await _cameraController!.stopVideoRecording();
       setState(() {
         _isRecording = false;
         _isTimerActive = false;
+        _isUploading = true; // Show the uploading indicator
       });
       _timer.cancel();
 
@@ -65,17 +69,17 @@ class _RecordingScreenState extends State<RecordingScreen> {
       print("Recorded Video Path: ${videoFile.path}");
 
       String timestamp = "$formattedDate, $formattedTime";
-      // Upload video to Cloudinary and store URL
-      String? videoUrl = await CustomVideoUrlGenerator().uploadToCloudinary(recordedFile);
-      if (videoUrl != null) {
-        setState(() {
-          _isUploading = true;
-        });
 
-        // Add video URL to the list of videos
+      // Upload video to Cloudinary and store URL
+      String? videoUrl =
+          await CustomVideoUrlGenerator().uploadToCloudinary(recordedFile);
+
+      if (videoUrl != null) {
+        // Add video URL to Firestore
         UserProvider provider = Provider.of(context, listen: false);
-        provider.uploadVideo(videoURL: videoUrl, timestamp: timestamp);
-        print("Video URL uploaded to Firestore");
+        await provider.uploadVideo(
+            videoURL: videoUrl,
+            timestamp: timestamp); // Ensure upload completes
 
         toastMessage(
           context: context,
@@ -85,11 +89,21 @@ class _RecordingScreenState extends State<RecordingScreen> {
           toastColor: Colors.green[500],
           borderColor: Colors.green,
         );
-
-        setState(() {
-          _isUploading = false;
-        });
+      } else {
+        toastMessage(
+          context: context,
+          message: "Upload failed. Try again.",
+          position: DelightSnackbarPosition.top,
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[500],
+          borderColor: Colors.red,
+        );
       }
+
+      // Hide the uploading indicator after upload is finished
+      setState(() {
+        _isUploading = false;
+      });
     }
   }
 
@@ -126,6 +140,9 @@ class _RecordingScreenState extends State<RecordingScreen> {
                 )
               : Center(child: CircularProgressIndicator()),
 
+          const SizedBox(
+            height: 25,
+          ),
           // Timer Display
           if (_isRecording)
             Text(
@@ -134,26 +151,28 @@ class _RecordingScreenState extends State<RecordingScreen> {
             ),
 
           // Start/Stop Button
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue[400],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+          SizedBox(
+            width: 170,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue[400],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
               ),
-            ),
-            onPressed: _isRecording ? _stopRecording : _startRecording,
-            child: Text(
-              _isRecording ? 'Stop Recording' : 'Start Recording',
-              style: TextStyle(color: Colors.white),
+              onPressed: _isRecording ? _stopRecording : _startRecording,
+              child: _isUploading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: backgroundColor,
+                      ),
+                    )
+                  : Text(
+                      _isRecording ? 'Stop Recording' : 'Start Recording',
+                      style: TextStyle(color: Colors.white),
+                    ),
             ),
           ),
-
-          // Uploading Indicator
-          if (_isUploading)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
-            ),
         ],
       ),
     );

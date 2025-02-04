@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
 import 'package:navigaurd/screens/auth/widgets/customtextformfield.dart';
 import 'package:navigaurd/screens/widgets/appbar.dart';
+import 'package:navigaurd/screens/widgets/buttons/elevated.dart';
 
 class InsuranceScreen extends StatefulWidget {
   const InsuranceScreen({super.key});
@@ -89,6 +91,7 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppbar(label: "Insurance"),
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -208,6 +211,14 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
                     validator: (value) => value == null || value.isEmpty
                         ? 'Insurance type is required'
                         : null,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomElevatedButton(
+                      text: "Submit", onPressed: signUpInsurance),
+                  const SizedBox(
+                    height: 20,
                   ),
                 ],
               ),
