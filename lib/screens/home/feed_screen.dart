@@ -109,6 +109,7 @@ class FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return Consumer<UserProvider>(builder: (context, provider, _) {
       return provider.isLoading
           ? const Center(child: CircularProgressIndicator(color: blueColor))
@@ -117,7 +118,7 @@ class FeedScreenState extends State<FeedScreen> {
                 child: Column(
                   children: [
                     Container(
-                      height: 250,
+                      height: screenHeight * .32,
                       width: double.infinity,
                       decoration: const BoxDecoration(
                         color: blueColor,
@@ -137,22 +138,22 @@ class FeedScreenState extends State<FeedScreen> {
                                 const Text(
                                   "Welcome!",
                                   style: TextStyle(
-                                      fontSize: 30,
+                                      fontSize: 27,
                                       fontWeight: FontWeight.bold,
                                       color: backgroundColor),
                                 ),
                                 Text(
-                                  provider.user.name,
+                                  provider.user.name.split(' ')[0],
                                   style: const TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
                                       color: backgroundColor),
                                 ),
-                                const SizedBox(height: 90),
+                                SizedBox(height: screenHeight * .1),
                                 Text(
                                   weatherMessage,
                                   style: const TextStyle(
-                                      fontSize: 17,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: backgroundColor),
                                 ),
@@ -163,8 +164,8 @@ class FeedScreenState extends State<FeedScreen> {
                             top: -15,
                             right: -25,
                             child: SizedBox(
-                              width: 285,
-                              height: 180,
+                              width: screenHeight * .35,
+                              height: screenHeight * .23,
                               child: Lottie.asset(
                                 "assets/home/driving.json",
                               ),
@@ -229,8 +230,10 @@ class FeedScreenState extends State<FeedScreen> {
   }
 
   Widget customCard(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.height;
+    double buttonHeight = screenWidth * 0.73;
     return SizedBox(
-      height: 600,
+      height: buttonHeight,
       child: GridView.count(
         crossAxisCount: 2,
         mainAxisSpacing: 15,

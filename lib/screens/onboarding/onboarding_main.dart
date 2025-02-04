@@ -18,6 +18,7 @@ class OnboardingMainScreenState extends State<OnboardingMainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Stack(
         children: [
@@ -61,7 +62,7 @@ class OnboardingMainScreenState extends State<OnboardingMainScreen> {
           ),
           Positioned(
             bottom: 90,
-            left: 130,
+            left: screenWidth * .4,
             child: SmoothPageIndicator(
               controller: controller,
               count: 4,

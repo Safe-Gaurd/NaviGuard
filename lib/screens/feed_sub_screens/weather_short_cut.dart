@@ -21,11 +21,14 @@ class WeatherWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double buttonWidth = screenWidth * 0.45;
+    double buttonHeight = screenWidth * 0.5;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(
         padding: const EdgeInsets.only(left: 10),
-        height: 180,
+        height: buttonHeight,
         width: double.infinity,
         decoration: BoxDecoration(
           color: backgroundColor,
@@ -58,7 +61,7 @@ class WeatherWidget extends StatelessWidget {
                   temperature,
                   style: const TextStyle(
                     color: blueColor,
-                    fontSize: 45,
+                    fontSize: 43,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -72,7 +75,7 @@ class WeatherWidget extends StatelessWidget {
                       date,
                       style: const TextStyle(
                         color: blueColor,
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -97,12 +100,10 @@ class WeatherWidget extends StatelessWidget {
             // Weather Icon Section
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                iconPath,
-                fit: BoxFit.cover,
-                width: 130,
-                height: 150,
-              ),
+              child: Image.asset(iconPath,
+                  fit: BoxFit.cover,
+                  width: buttonWidth * .8,
+                  height: buttonHeight * .9),
             ),
           ],
         ),

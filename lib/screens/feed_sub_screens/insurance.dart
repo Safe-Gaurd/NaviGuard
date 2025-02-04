@@ -107,13 +107,13 @@ class _InsuranceScreenState extends State<InsuranceScreen> {
                       Text(
                         "S",
                         style: TextStyle(
-                          fontSize: 60.0,
+                          fontSize: 55,
                         ),
                       ),
                       Text(
                         "ecure your future with the right\n insurance today",
                         style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
