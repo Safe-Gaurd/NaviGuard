@@ -16,12 +16,12 @@ class UserProvider extends ChangeNotifier {
 
   Future<void> fetchUser() async {
     try {
-      print("📥 Fetching user data...");
+      //print("📥 Fetching user data...");
       var snap = await _firestore.collection('users').doc(uid).get();
       _user = UserModel.fromSnapshot(snap);
-      print("✅ User data fetched successfully!");
+      //print("✅ User data fetched successfully!");
     } catch (e) {
-      print("❌ Error fetching user data: $e");
+      //print("❌ Error fetching user data: $e");
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -38,7 +38,7 @@ class UserProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      print("📷 Selecting image...");
+      //print("📷 Selecting image...");
       File? image = await CustomImagePicker(isReport: false).pickImage(source);
       _profileImage = image;
       notifyListeners();
@@ -47,7 +47,7 @@ class UserProvider extends ChangeNotifier {
         await generateProfileUrl();
       }
     } catch (e) {
-      print("❌ Error selecting image: $e");
+      //print("❌ Error selecting image: $e");
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -56,17 +56,17 @@ class UserProvider extends ChangeNotifier {
 
   Future<void> generateProfileUrl() async {
     try {
-      print("⏳ Uploading image...");
+      //print("⏳ Uploading image...");
       String? imageUrl = await CustomImagePicker(isReport: false)
           .uploadToCloudinary(isReport: false, imageFile: profileImage);
-      print("✅ Image uploaded to Cloudinary successfully: $imageUrl");
+      //print("✅ Image uploaded to Cloudinary successfully: $imageUrl");
 
       if (imageUrl != null && imageUrl.isNotEmpty) {
         _photoURL = imageUrl;
         notifyListeners();
       }
     } catch (e) {
-      print("❌ Error uploading image: $e");
+      //print("❌ Error uploading image: $e");
     }
   }
 
@@ -93,64 +93,69 @@ class UserProvider extends ChangeNotifier {
 
       _isUpdate = true;
       notifyListeners();
-      print("✍️ Updating user details in Firestore...");
+      //print("✍️ Updating user details in Firestore...");
 
       await _firestore.collection('users').doc(uid).update(updatedUser.toMap());
       _isUpdate = false;
       res = 'update';
-      print("✅ User details and photo URL updated successfully!");
+      //print("✅ User details and photo URL updated successfully!");
 
       await fetchUser();
       notifyListeners();
     } catch (error) {
       res = error.toString();
-      print("❌ Error updating user details: $error");
+      //print("❌ Error updating user details: $error");
       throw Exception(error.toString());
     }
 
     return res;
   }
 
-
   Future<void> uploadVideo({
     required String videoURL,
     required String timestamp, // Use DateTime instead of String for timestamp
   }) async {
     try {
-      await _firestore.collection('users').doc(uid).collection('recordings').add({
+      await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('recordings')
+          .add({
         'timestamp': timestamp,
         'videoURL': videoURL,
       });
-      print("✅ Video added to Firestore successfully!");
+      //print("✅ Video added to Firestore successfully!");
       notifyListeners();
     } catch (e) {
-      print("❌ Error adding video: $e");
+      //print("❌ Error adding video: $e");
     }
   }
 
   final List<Map<String, String>> _videosList = [];
   List<Map<String, String>> get videosList => _videosList;
 
- void listenToVideos() {
-  try {
-    print("📡 Listening to video updates...");
-    _firestore.collection('users').doc(uid).collection('recordings').snapshots().listen((snap) {
-      _videosList.clear(); // Clear existing list before updating
+  void listenToVideos() {
+    try {
+      //print("📡 Listening to video updates...");
+      _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('recordings')
+          .snapshots()
+          .listen((snap) {
+        _videosList.clear(); // Clear existing list before updating
 
-      for (var doc in snap.docs) {
-        // Add the timestamp and videoURL as a Map
-        _videosList.add({
-          'timestamp': doc['timestamp'],
-          'videoURL': doc['videoURL']
-        });
-      }
+        for (var doc in snap.docs) {
+          // Add the timestamp and videoURL as a Map
+          _videosList.add(
+              {'timestamp': doc['timestamp'], 'videoURL': doc['videoURL']});
+        }
 
-      print("✅ Video list updated in real-time!");
-      notifyListeners(); // Notify UI about the change
-    });
-  } catch (e) {
-    print("❌ Error listening to video updates: $e");
+        //print("✅ Video list updated in real-time!");
+        notifyListeners(); // Notify UI about the change
+      });
+    } catch (e) {
+      //print("❌ Error listening to video updates: $e");
+    }
   }
-}
-
 }

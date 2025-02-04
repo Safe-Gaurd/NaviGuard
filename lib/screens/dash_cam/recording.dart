@@ -64,9 +64,9 @@ class _RecordingScreenState extends State<RecordingScreen> {
         _isUploading = true; // Show the uploading indicator
       });
       _timer.cancel();
-      print("Recorded Video Path: }");
+      //print("Recorded Video Path: }");
       File recordedFile = File(videoFile.path);
-      print("Recorded Video Path: ${videoFile.path}");
+      //print("Recorded Video Path: ${videoFile.path}");
 
       String timestamp = "$formattedDate, $formattedTime";
 

@@ -24,23 +24,21 @@ class ReportDataProvider extends ChangeNotifier {
   final List<String> _photosList = [];
   List<String> get photosList => _photosList;
 
-  
   void fetchReport() {
-  _isLoading = true;
-  notifyListeners();
-
-  _firestore.collection('reports').snapshots().listen((snapshot) {
-    _report = snapshot.docs.map((doc) => ReportDataModel.fromMap(doc)).toList();
-    _isLoading = false;
+    _isLoading = true;
     notifyListeners();
-  }, onError: (error) {
-    print('Error fetching reports: $error');
-    _isLoading = false;
-    notifyListeners();
-  });
-}
 
-
+    _firestore.collection('reports').snapshots().listen((snapshot) {
+      _report =
+          snapshot.docs.map((doc) => ReportDataModel.fromMap(doc)).toList();
+      _isLoading = false;
+      notifyListeners();
+    }, onError: (error) {
+      //print('Error fetching reports: $error');
+      _isLoading = false;
+      notifyListeners();
+    });
+  }
 
   File? _reportImage;
   File? get reportImage => _reportImage;
@@ -49,9 +47,9 @@ class ReportDataProvider extends ChangeNotifier {
   String? get photoURL => _photoURL;
 
   Future<void> selectImage(ImageSource source) async {
-    _isLoading=true;
+    _isLoading = true;
     try {
-      print("📷 Selecting image...");
+      //print("📷 Selecting image...");
       File? image = await CustomImagePicker(isReport: true).pickImage(source);
       _reportImage = image;
       notifyListeners();
@@ -60,27 +58,27 @@ class ReportDataProvider extends ChangeNotifier {
         await generateProfileUrl();
       }
     } catch (e) {
-      print("❌ Error selecting image: $e");
-    }
-    finally {
-      _isLoading=false;
+      //print("❌ Error selecting image: $e");
+    } finally {
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> generateProfileUrl() async {
     try {
-      print("⏳ Uploading image...");
-      String? imageUrl = await CustomImagePicker(isReport: true).uploadToCloudinary(isReport:true ,imageFile: reportImage);
-      print("✅ Image uploaded to Cloudinary successfully: $imageUrl");
+      //print("⏳ Uploading image...");
+      String? imageUrl = await CustomImagePicker(isReport: true)
+          .uploadToCloudinary(isReport: true, imageFile: reportImage);
+      //print("✅ Image uploaded to Cloudinary successfully: $imageUrl");
 
       if (imageUrl != null && imageUrl.isNotEmpty) {
-        _photoURL = imageUrl; 
+        _photoURL = imageUrl;
         _photosList.add(_photoURL!);
         notifyListeners();
       }
     } catch (e) {
-      print("❌ Error uploading image: $e");
+      //print("❌ Error uploading image: $e");
     }
   }
 
@@ -90,13 +88,13 @@ class ReportDataProvider extends ChangeNotifier {
     String? landMark,
     LatLng? coordinates,
   }) async {
-    String res="";
+    String res = "";
     if (coordinates == null) {
-      print('Coordinates are required to add a report.');
-      res="";
+      //print('Coordinates are required to add a report.');
+      res = "";
     }
 
-    final String timeFormatted='$formattedDate, $formattedTime';
+    final String timeFormatted = '$formattedDate, $formattedTime';
     final report = ReportDataModel(
       landMark: landMark,
       town: town,
@@ -109,12 +107,15 @@ class ReportDataProvider extends ChangeNotifier {
     try {
       String documentId = '${coordinates?.latitude},${coordinates?.longitude}';
 
-      await _firestore.collection('reports').doc(documentId).set(report.toMap());
-      res="success";
+      await _firestore
+          .collection('reports')
+          .doc(documentId)
+          .set(report.toMap());
+      res = "success";
       _photosList.clear();
       notifyListeners();
     } catch (e) {
-      print('Error adding report: ${e.toString()}');
+      //print('Error adding report: ${e.toString()}');
     }
     return res;
   }
