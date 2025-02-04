@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
@@ -12,9 +13,9 @@ import 'package:navigaurd/screens/maps/accident_report.dart';
 import 'package:navigaurd/screens/widgets/buttons/elevated.dart';
 
 class MapScreen extends StatefulWidget {
-  LatLng? accidentCoordinates;
+  final LatLng? accidentCoordinates;
 
-  MapScreen({super.key, this.accidentCoordinates});
+  const MapScreen({super.key, this.accidentCoordinates});
 
   @override
   State<MapScreen> createState() => MapScreenState();
@@ -38,6 +39,7 @@ class MapScreenState extends State<MapScreen> {
   StreamSubscription? _positionStreamSubscription;
   Position? _lastPosition;
   String _responseText = "";
+  LatLng? _currentLocation;
 
   @override
   void initState() {
@@ -46,11 +48,37 @@ class MapScreenState extends State<MapScreen> {
   }
 
   // Function to get user location and listen for changes
+  // Future<void> getUserLocation() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+
+  //   // Check if location services are enabled
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     return Future.error('Location services are disabled.');
+  //   }
+
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permissions are denied.');
+  //     }
+  //   }
+
+  //   if (permission == LocationPermission.deniedForever) {
+  //     return Future.error('Location permissions are permanently denied.');
+  //   }
+
+  //   setState(() {
+  //     isMapLoading = false;
+  //   });
+  // }
+
   Future<void> getUserLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return Future.error('Location services are disabled.');
@@ -68,9 +96,22 @@ class MapScreenState extends State<MapScreen> {
       return Future.error('Location permissions are permanently denied.');
     }
 
+    // Get the current position
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    // Store the user's current location
     setState(() {
+      _currentLocation = LatLng(position.latitude, position.longitude);
       isMapLoading = false;
     });
+
+    // Move the camera to the current location
+    // _googleMapController.animateCamera(
+    //   CameraUpdate.newCameraPosition(
+    //     CameraPosition(target: _currentLocation!, zoom: 14.5),
+    //   ),
+    // );
   }
 
   // Function to send request to the model when location changes
@@ -250,7 +291,7 @@ class MapScreenState extends State<MapScreen> {
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => AccidentReportScreen(
-              coordinates: LatLng(16.566222, 81.522555),
+              coordinates: _currentLocation ?? LatLng(16.56222, 81.522555),
             ),
           ));
         },
@@ -338,22 +379,24 @@ class MapScreenState extends State<MapScreen> {
 
       sendRequestToModel(originLat, originLng);
 
-      // // Listen to location updates
-      // _positionStreamSubscription = Geolocator.getPositionStream(
-      //   locationSettings: LocationSettings(
-      //     accuracy:
-      //         LocationAccuracy.high, // This is the new way to set accuracy
-      //     distanceFilter: 50, // Only updates every 10 meters of movement
-      //   ),
-      // ).listen((Position position) {
-      //   // Only call the function if the position has changed
-      //   if (_lastPosition == null ||
-      //       _lastPosition!.latitude != position.latitude ||
-      //       _lastPosition!.longitude != position.longitude) {
-      //     _lastPosition = position;
-      //     sendRequestToModel(position.latitude, position.longitude);
-      //   }
-      // });
+      // Listen to location updates
+      _positionStreamSubscription = Geolocator.getPositionStream(
+        locationSettings: LocationSettings(
+          accuracy:
+              LocationAccuracy.high, // This is the new way to set accuracy
+          distanceFilter: 50, // Only updates every 10 meters of movement
+        ),
+      ).listen((Position position) {
+        // Only call the function if the position has changed
+        if (_lastPosition == null ||
+            _lastPosition!.latitude != position.latitude ||
+            _lastPosition!.longitude != position.longitude) {
+          _lastPosition = position;
+          Future.delayed(Duration(minutes: 5), () {
+            sendRequestToModel(position.latitude, position.longitude);
+          });
+        }
+      });
     } else {
       print("Failed to fetch route: ${response.body}");
     }

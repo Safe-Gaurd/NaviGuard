@@ -64,6 +64,7 @@ dependencies:
   file_picker: ^8.3.1
 
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -123,13 +124,13 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
-# flutter_native_splash:
-#   color: "#004AAD"
-#   image: assets/splash_screen/logo.png 
-#   android: true
-#   ios: true
-#   web: true
-#   fullscreen: true
+flutter_native_splash:
+  color: "#004AAD"
+  image: assets/splash_screen/logo.png 
+  android: false
+  ios: true
+  web: false
+  fullscreen: true
 
 flutter_launcher_icons:
   android: "launcher_icon"

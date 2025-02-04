@@ -230,7 +230,7 @@ class FeedScreenState extends State<FeedScreen> {
 
   Widget customCard(BuildContext context) {
     return SizedBox(
-      height: 550,
+      height: 600,
       child: GridView.count(
         crossAxisCount: 2,
         mainAxisSpacing: 15,
