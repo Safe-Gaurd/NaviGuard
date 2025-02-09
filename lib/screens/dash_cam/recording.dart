@@ -37,7 +37,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
     if (cameras != null && cameras!.isNotEmpty) {
       _cameraController =
           CameraController(cameras![0], ResolutionPreset.medium);
-      await _cameraController!.initialize();
+      await _cameraController!.initialize();      
       if (mounted) setState(() {});
     }
   }
@@ -45,6 +45,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
   Future<void> _startRecording() async {
     if (_cameraController != null && _cameraController!.value.isInitialized) {
       await _cameraController!.startVideoRecording();
+
       setState(() {
         _isRecording = true;
         _isTimerActive = true;
@@ -134,9 +135,11 @@ class _RecordingScreenState extends State<RecordingScreen> {
           // Camera Preview
           _cameraController != null && _cameraController!.value.isInitialized
               ? AspectRatio(
-                  // aspectRatio: _cameraController!.value.aspectRatio,
                   aspectRatio: 1,
+                  child: Transform.rotate(
+                  angle: 90 * (3.1415927 / 180),
                   child: CameraPreview(_cameraController!),
+                  )
                 )
               : Center(child: CircularProgressIndicator()),
 

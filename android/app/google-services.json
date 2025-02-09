@@ -14,15 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "1018698907487-cf9hsmsa4dh16aaeuj0n7fikbu13qa92.apps.googleusercontent.com",
+          "client_id": "1018698907487-kmijspkfatlm6rn7bdd4nf993v7o6ufm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.navigaurd",
-            "certificate_hash": "b2a5bc825726fdea139cc3b9dfa419bae68fca31"
+            "certificate_hash": "07eb860683a1b4894bc57722041d045d20556e35"
           }
         },
         {
-          "client_id": "1018698907487-45vj6m0nlkqcjhd3f013jkvaq5okl2e8.apps.googleusercontent.com",
+          "client_id": "1018698907487-81f1eompfihmgh8r5ccp8r7hoqgqu90k.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

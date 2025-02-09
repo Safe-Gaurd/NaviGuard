@@ -62,7 +62,7 @@ class OnboardingMainScreenState extends State<OnboardingMainScreen> {
           ),
           Positioned(
             bottom: 90,
-            left: screenWidth * .4,
+            left: screenWidth * 0.37,
             child: SmoothPageIndicator(
               controller: controller,
               count: 4,

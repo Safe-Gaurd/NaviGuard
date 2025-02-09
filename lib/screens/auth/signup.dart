@@ -92,6 +92,43 @@ class SignupScreenState extends State<SignupScreen> {
     }
   }
 
+  Future<void> signUpWithGoogle() async {
+    setState(() {
+      isgoogleLoading = true;
+    });
+    try{
+        String res = await authService.handleSignUpWithGoogle();
+
+        if (res == "success") {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else {
+          toastMessage(
+          context: context,
+          message: res,
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+          position: DelightSnackbarPosition.top);
+        }
+    } catch (e) {
+        toastMessage(
+          context: context,
+          message: e.toString(),
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+          position: DelightSnackbarPosition.top);
+    }  
+    finally {
+      setState(() {
+        isgoogleLoading = false;
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -234,23 +271,7 @@ class SignupScreenState extends State<SignupScreen> {
                   LoginSignupButtons(
                     imagepath: "assets/auth/google.jpg",
                     label: "SignUP With Google",
-                    onTap: () {
-                      setState(() {
-                        isgoogleLoading = true;
-                      });
-                      String res =
-                          authService.handleSignUpWithGoogle().toString();
-                      res == "success"
-                          ? Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()),
-                            )
-                          : toastMessage(context: context, message: res);
-
-                      setState(() {
-                        isgoogleLoading = false;
-                      });
-                    },
+                    onTap: signUpWithGoogle,
                     isLoading: isgoogleLoading,
                   ),
                   const SizedBox(height: 10),

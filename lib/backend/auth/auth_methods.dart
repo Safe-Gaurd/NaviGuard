@@ -73,7 +73,9 @@ class AuthService {
   Future<String> handleSignUpWithGoogle() async {
   String res = "";
   try {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
     if (googleUser == null) {
       return "Google sign-in aborted.";
     }
@@ -102,9 +104,7 @@ class AuthService {
       });
     }
     res = "success";
-  } catch (e, stacktrace) {
-    print("Error: $e");
-    print("Stack trace: $stacktrace");
+  } catch (e) {
     res = "Error signing in with Google: ${e.toString()}";
   }
   return res;

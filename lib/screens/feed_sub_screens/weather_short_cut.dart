@@ -22,13 +22,13 @@ class WeatherWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double buttonWidth = screenWidth * 0.45;
-    double buttonHeight = screenWidth * 0.5;
+    double widgetWidth = screenWidth * 0.4;
+    double widgetHeight = screenWidth * 0.5;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: widgetWidth*0.09),
       child: Container(
-        padding: const EdgeInsets.only(left: 10),
-        height: buttonHeight,
+        padding: EdgeInsets.only(left: widgetWidth*0.1),
+        height: widgetHeight,
         width: double.infinity,
         decoration: BoxDecoration(
           color: backgroundColor,
@@ -102,8 +102,8 @@ class WeatherWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: Image.asset(iconPath,
                   fit: BoxFit.cover,
-                  width: buttonWidth * .8,
-                  height: buttonHeight * .9),
+                  width: widgetWidth * 1,
+                  height: widgetHeight * .9),
             ),
           ],
         ),

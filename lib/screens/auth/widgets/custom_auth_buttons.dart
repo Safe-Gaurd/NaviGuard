@@ -18,7 +18,7 @@ class LoginSignupButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double buttonWidth = screenWidth * 0.56;
+    double buttonWidth = screenWidth * 0.45;
     double buttonHeight = screenWidth * 0.12;
     return ElevatedButton(
         onPressed: isLoading ? null : onTap,
@@ -43,8 +43,8 @@ class LoginSignupButtons extends StatelessWidget {
                               fontSize: 16, color: Colors.white)))
                   : Row(
                       children: [
-                        ClipOval(child: Image.asset(imagepath!, height: 30)),
-                        const SizedBox(width: 15),
+                        ClipOval(child: Image.asset(imagepath!, height: buttonHeight*0.7)),
+                        SizedBox(width: buttonWidth*0.05),
                         Text(
                           label,
                           style:

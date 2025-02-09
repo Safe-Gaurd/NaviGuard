@@ -76,7 +76,7 @@ class FeedScreenState extends State<FeedScreen> {
         updateWeatherMessage();
       });
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
     } finally {
       setState(() => isLoading = false);
     }
@@ -118,7 +118,7 @@ class FeedScreenState extends State<FeedScreen> {
                 child: Column(
                   children: [
                     Container(
-                      height: screenHeight * .32,
+                      height: screenHeight * .35,
                       width: double.infinity,
                       decoration: const BoxDecoration(
                         color: blueColor,
@@ -145,15 +145,15 @@ class FeedScreenState extends State<FeedScreen> {
                                 Text(
                                   provider.user.name.split(' ')[0],
                                   style: const TextStyle(
-                                      fontSize: 25,
+                                      fontSize: 24,
                                       fontWeight: FontWeight.bold,
                                       color: backgroundColor),
                                 ),
-                                SizedBox(height: screenHeight * .1),
+                                SizedBox(height: screenHeight * .17),
                                 Text(
                                   weatherMessage,
                                   style: const TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 17,
                                       fontWeight: FontWeight.bold,
                                       color: backgroundColor),
                                 ),
@@ -161,11 +161,11 @@ class FeedScreenState extends State<FeedScreen> {
                             ),
                           ),
                           Positioned(
-                            top: -15,
-                            right: -25,
+                            top: screenHeight*0.03,
+                            right: -10,
                             child: SizedBox(
-                              width: screenHeight * .35,
-                              height: screenHeight * .23,
+                              width: screenHeight * .3,
+                              height: screenHeight * .22,
                               child: Lottie.asset(
                                 "assets/home/driving.json",
                               ),
@@ -178,7 +178,7 @@ class FeedScreenState extends State<FeedScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: SizedBox(
-                        height: 200,
+                        height: screenHeight*0.22,
                         child: PageView(
                           controller: controller,
                           children: [
@@ -230,14 +230,14 @@ class FeedScreenState extends State<FeedScreen> {
   }
 
   Widget customCard(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.height;
-    double buttonHeight = screenWidth * 0.73;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double widgetHeight = screenHeight * 0.66;
     return SizedBox(
-      height: buttonHeight,
+      height: widgetHeight,
       child: GridView.count(
         crossAxisCount: 2,
-        mainAxisSpacing: 15,
-        crossAxisSpacing: 15,
+        mainAxisSpacing: screenHeight*0.01,
+        crossAxisSpacing: screenHeight*0.01,
         physics: NeverScrollableScrollPhysics(),
         children: [
           CustomCardButton(

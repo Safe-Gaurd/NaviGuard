@@ -47,34 +47,6 @@ class MapScreenState extends State<MapScreen> {
     getUserLocation();
   }
 
-  // Function to get user location and listen for changes
-  // Future<void> getUserLocation() async {
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-
-  //   // Check if location services are enabled
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     return Future.error('Location services are disabled.');
-  //   }
-
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       return Future.error('Location permissions are denied.');
-  //     }
-  //   }
-
-  //   if (permission == LocationPermission.deniedForever) {
-  //     return Future.error('Location permissions are permanently denied.');
-  //   }
-
-  //   setState(() {
-  //     isMapLoading = false;
-  //   });
-  // }
-
   Future<void> getUserLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -106,12 +78,6 @@ class MapScreenState extends State<MapScreen> {
       isMapLoading = false;
     });
 
-    // Move the camera to the current location
-    // _googleMapController.animateCamera(
-    //   CameraUpdate.newCameraPosition(
-    //     CameraPosition(target: _currentLocation!, zoom: 14.5),
-    //   ),
-    // );
   }
 
   // Function to send request to the model when location changes

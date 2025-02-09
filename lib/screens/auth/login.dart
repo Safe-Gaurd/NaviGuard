@@ -72,6 +72,45 @@ class LoginScreenState extends State<LoginScreen>
 
   }
 
+  Future<void> loginWithGoogle() async{
+    setState(() {
+      isgoogleLoading=true;
+    });
+    try{
+        String res = await authService.handleSignUpWithGoogle();
+
+        if (res == "success") {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else {
+          toastMessage(
+          context: context,
+          message: res,
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+          position: DelightSnackbarPosition.top);
+        }
+    } catch (e) {
+        toastMessage(
+          context: context,
+          message: e.toString(),
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+          position: DelightSnackbarPosition.top);
+    }  
+    finally {
+      setState(() {
+        isgoogleLoading = false;
+      });
+    }  
+    setState(() {
+      isgoogleLoading=false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,20 +217,8 @@ class LoginScreenState extends State<LoginScreen>
                   LoginSignupButtons(
                     imagepath: "assets/auth/google.jpg", 
                     label: "Login With Google", 
-                    onTap: (){
-                      setState(() {
-                        isgoogleLoading=true;
-                      });
-
-                      String res=authService.handleSignUpWithGoogle().toString();
-                      if(res=="success")
-                      {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeScreen()));
-                        return;
-                      }
-                      toastMessage(context: context, message: res);
-                      isLoading = !isgoogleLoading;
-                    }),
+                    onTap: loginWithGoogle,
+                  ),
 
                   const SizedBox(height: 10,),
                   TextButton(onPressed: (){

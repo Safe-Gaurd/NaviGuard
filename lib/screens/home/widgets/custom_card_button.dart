@@ -21,8 +21,9 @@ class CustomCardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     double buttonWidth = screenWidth * .25;
-    double buttonHeight = screenWidth * 0.25;
+    double buttonHeight = screenHeight * 0.12;
     return GestureDetector(
       onTap: onTap ?? () {},
       child: Card(
@@ -35,7 +36,6 @@ class CustomCardButton extends StatelessWidget {
             gradient: gradient,
             borderRadius: BorderRadius.circular(20),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -47,11 +47,11 @@ class CustomCardButton extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: buttonHeight*0.05),
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
