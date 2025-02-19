@@ -22,13 +22,12 @@ class WeatherWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double widgetWidth = screenWidth * 0.4;
-    double widgetHeight = screenWidth * 0.5;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: widgetWidth*0.09),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth*0.05),
       child: Container(
-        padding: EdgeInsets.only(left: widgetWidth*0.1),
-        height: widgetHeight,
+        padding: EdgeInsets.only(left: screenWidth*0.05),
+        height: screenHeight*.2,
         width: double.infinity,
         decoration: BoxDecoration(
           color: backgroundColor,
@@ -52,20 +51,18 @@ class WeatherWidget extends StatelessWidget {
                   weatherCondition,
                   style: const TextStyle(
                     color: blueColor,
-                    fontSize: 18,
+                    fontSize: 23,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 5),
                 Text(
                   temperature,
                   style: const TextStyle(
                     color: blueColor,
-                    fontSize: 43,
+                    fontSize: 45,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 5),
                 Row(
                   children: [
                     const Icon(Icons.calendar_today,
@@ -75,7 +72,7 @@ class WeatherWidget extends StatelessWidget {
                       date,
                       style: const TextStyle(
                         color: blueColor,
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -102,8 +99,8 @@ class WeatherWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: Image.asset(iconPath,
                   fit: BoxFit.cover,
-                  width: widgetWidth * 1,
-                  height: widgetHeight * .9),
+                  width: screenWidth * .3,
+                  height: screenHeight * .7),
             ),
           ],
         ),

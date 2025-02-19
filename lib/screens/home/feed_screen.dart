@@ -110,6 +110,7 @@ class FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Consumer<UserProvider>(builder: (context, provider, _) {
       return provider.isLoading
           ? const Center(child: CircularProgressIndicator(color: blueColor))
@@ -231,9 +232,8 @@ class FeedScreenState extends State<FeedScreen> {
 
   Widget customCard(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double widgetHeight = screenHeight * 0.66;
     return SizedBox(
-      height: widgetHeight,
+      height: screenHeight*.88,
       child: GridView.count(
         crossAxisCount: 2,
         mainAxisSpacing: screenHeight*0.01,
@@ -265,14 +265,6 @@ class FeedScreenState extends State<FeedScreen> {
                 colors: [Colors.purple[300]!, Colors.pink[400]!]),
           ),
           CustomCardButton(
-            title: "Reports Analysis",
-            imagePath: "assets/home/accident_analysis.jpg",
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ReportAnalysisScreen())),
-            gradient: LinearGradient(
-                colors: [Colors.orange[300]!, Colors.orange[600]!]),
-          ),
-          CustomCardButton(
             title: "Emergency",
             imagePath: "assets/home/emergency.jpg",
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -281,12 +273,34 @@ class FeedScreenState extends State<FeedScreen> {
                 LinearGradient(colors: [Colors.red[300]!, Colors.red[600]!]),
           ),
           CustomCardButton(
+            title: "Reports Analysis",
+            imagePath: "assets/home/accident_analysis.jpg",
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ReportAnalysisScreen())),
+            gradient: LinearGradient(
+                colors: [Colors.orange[300]!, Colors.orange[600]!]),
+          ),
+          CustomCardButton(
             title: "Insurance",
             imagePath: "assets/home/insurance.jpg",
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const InsuranceScreen())),
             gradient: LinearGradient(
                 colors: [Colors.indigo[300]!, Colors.purple[600]!]),
+          ),
+          CustomCardButton(
+            title: "Blood Bank",
+            imagePath: "assets/home/blood_bank.jpeg",
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => MapScreen())),
+            gradient: LinearGradient(colors: [Colors.pink[300]!, Colors.pink[500]!]),
+          ),
+          CustomCardButton(
+            title: "Hospitals",
+            imagePath: "assets/home/hospitals.jpg",
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => MapScreen())),
+            gradient:LinearGradient(colors: [Colors.lightBlueAccent, Colors.blueAccent]),
           ),
         ],
       ),
