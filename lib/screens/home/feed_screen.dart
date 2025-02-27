@@ -288,20 +288,20 @@ class FeedScreenState extends State<FeedScreen> {
             gradient: LinearGradient(
                 colors: [Colors.indigo[300]!, Colors.purple[600]!]),
           ),
-          CustomCardButton(
-            title: "Blood Bank",
-            imagePath: "assets/home/blood_bank.jpeg",
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => MapScreen())),
-            gradient: LinearGradient(colors: [Colors.pink[300]!, Colors.pink[500]!]),
-          ),
-          CustomCardButton(
-            title: "Hospitals",
-            imagePath: "assets/home/hospitals.jpg",
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => MapScreen())),
-            gradient:LinearGradient(colors: [Colors.lightBlueAccent, Colors.blueAccent]),
-          ),
+          // CustomCardButton(
+          //   title: "Blood Bank",
+          //   imagePath: "assets/home/blood_bank.jpeg",
+          //   onTap: () => Navigator.of(context)
+          //       .push(MaterialPageRoute(builder: (context) => MapScreen())),
+          //   gradient: LinearGradient(colors: [Colors.pink[300]!, Colors.pink[500]!]),
+          // ),
+          // CustomCardButton(
+          //   title: "Hospitals",
+          //   imagePath: "assets/home/hospitals.jpg",
+          //   onTap: () => Navigator.of(context)
+          //       .push(MaterialPageRoute(builder: (context) => MapScreen())),
+          //   gradient:LinearGradient(colors: [Colors.lightBlueAccent, Colors.blueAccent]),
+          // ),
         ],
       ),
     );
