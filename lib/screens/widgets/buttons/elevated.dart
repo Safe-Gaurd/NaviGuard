@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:navigaurd/constants/colors.dart';
 
 class CustomElevatedButton extends StatelessWidget 
 {
@@ -9,6 +10,8 @@ class CustomElevatedButton extends StatelessWidget
   final VoidCallback? onPressed;
   final double? borderRadius;
   final TextStyle? textStyle;
+  final bool isIcon;
+  final IconData? icon;
 
   const CustomElevatedButton({
     super.key,
@@ -18,6 +21,8 @@ class CustomElevatedButton extends StatelessWidget
     required this.text,
     this.onPressed,
     this.textStyle,
+    this.isIcon = false,
+    this.icon,
     
     });
 
@@ -26,8 +31,8 @@ class CustomElevatedButton extends StatelessWidget
     return ElevatedButton
             (
               style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(backgroundColor ?? Colors.blue[100]),
-                foregroundColor: WidgetStatePropertyAll(foregroundColor ?? Colors.black),
+                backgroundColor: WidgetStatePropertyAll(backgroundColor ?? blueColor),
+                foregroundColor: WidgetStatePropertyAll(foregroundColor ?? backgroundColor),
                 shape: WidgetStatePropertyAll(
                   RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderRadius ?? 10),
@@ -35,7 +40,9 @@ class CustomElevatedButton extends StatelessWidget
                 )
                 ),
               onPressed: onPressed,
-              child: Text(text, style: textStyle,),
+              child: isIcon
+              ? Icon(icon, color: Colors.white,)
+              : Text(text, style: textStyle,),
             );
   }
 }

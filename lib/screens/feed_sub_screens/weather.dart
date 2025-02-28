@@ -110,7 +110,6 @@ class WeatherDetail extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              // Image with reduced opacity
               ColorFiltered(
                 colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.15), BlendMode.darken),
                 child: Image.asset(
@@ -119,7 +118,6 @@ class WeatherDetail extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              // Column for text
               Align(
                 alignment: Alignment.centerRight, 
                 child: Padding(
@@ -128,7 +126,6 @@ class WeatherDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Current temperature
                       Text(
                         "${weather.temperature.current.toStringAsFixed(2)}°C",
                         style: const TextStyle(
@@ -138,7 +135,7 @@ class WeatherDetail extends StatelessWidget {
                         ),
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end, // Align icon and text to the right
+                        mainAxisAlignment: MainAxisAlignment.end, 
                         children: [
                           const Icon(
                             Icons.location_on,
@@ -156,7 +153,6 @@ class WeatherDetail extends StatelessWidget {
                         ],
                       ),
                       
-                      // for current date and time
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -207,7 +203,6 @@ class WeatherDetail extends StatelessWidget {
       
           const SizedBox(height: 10),
           
-          // for more weather detail
           Container(
             height: 250,
             decoration: BoxDecoration(

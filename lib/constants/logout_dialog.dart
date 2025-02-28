@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/screens/widgets/buttons/elevated.dart';
 
-class CustomDialog{
-
+class CustomDialog {
   const CustomDialog({Key? key});
 
-
-    void showLogoutDialog({
-      required BuildContext context, 
-      required String label,
-      required String message,
-      required String option1,
-      void Function()? onPressed1,
-      required String option2,
-      void Function()? onPressed2,
-    }) 
-    {
-      showDialog(
+  void showLogoutDialog({
+    required BuildContext context,
+    required String label,
+    required String message,
+    required String option1,
+    void Function()? onPressed1,
+    required String option2,
+    void Function()? onPressed2,
+  }) {
+    showDialog(
         context: context,
         builder: (BuildContext context) {
           return Dialog(
+            backgroundColor: backgroundColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -29,11 +28,14 @@ class CustomDialog{
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image.asset("assets/home/notification.jpg",
+                  Image.asset(
+                    "assets/home/notification.jpg",
                     width: 40,
                     height: 40,
                   ),
-                  const SizedBox(height: 5,),
+                  const SizedBox(
+                    height: 5,
+                  ),
                   Text(
                     label,
                     style: const TextStyle(
@@ -57,12 +59,12 @@ class CustomDialog{
                     height: 50,
                     width: double.infinity,
                     child: CustomElevatedButton(
-                      borderRadius: 15, 
+                      borderRadius: 15,
                       text: option1,
                       textStyle: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
-                        ),
+                          color: backgroundColor),
                       onPressed: onPressed1,
                     ),
                   ),
@@ -74,12 +76,12 @@ class CustomDialog{
                     height: 50,
                     width: double.infinity,
                     child: CustomElevatedButton(
-                      borderRadius: 15, 
+                      borderRadius: 15,
                       text: option2,
                       textStyle: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
-                        ),
+                          color: backgroundColor),
                       onPressed: onPressed2,
                     ),
                   ),
@@ -88,5 +90,5 @@ class CustomDialog{
             ),
           );
         });
-    }
+  }
 }

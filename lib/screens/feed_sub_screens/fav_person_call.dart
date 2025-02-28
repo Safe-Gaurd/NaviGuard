@@ -5,6 +5,7 @@ import 'package:navigaurd/constants/toast.dart';
 import 'package:navigaurd/screens/auth/widgets/customtextformfield.dart';
 import 'package:navigaurd/screens/widgets/appbar.dart';
 import 'package:navigaurd/screens/widgets/buttons/elevated.dart';
+import 'package:permission_handler/permission_handler.dart'; 
 
 class FavPersonCallScreen extends StatefulWidget {
   const FavPersonCallScreen({super.key});
@@ -18,26 +19,53 @@ class FavPersonCallScreenState extends State<FavPersonCallScreen> {
 
   Future<void> _makeCall() async {
     String phoneNumber = phoneController.text.trim();
+    
+    // Check if the phone number is valid
     if (phoneNumber.isNotEmpty) {
-      bool? result = DirectCaller().makePhoneCall('+91$phoneNumber');
-      if (result != true) {
-        toastMessage(
+      
+      // Request CALL_PHONE permission
+      PermissionStatus status = await Permission.phone.request();
+
+      if (status.isGranted) {
+        // If permission is granted, make the phone call
+        bool? result = DirectCaller().makePhoneCall('+91$phoneNumber');
+        
+        if (result != true) {
+          toastMessage(
             context: context,
             message: "Failed to make the call. Please try again.",
             leadingIcon: const Icon(Icons.message),
-          toastColor: Colors.yellow[300],
-          borderColor: Colors.orange,
+            toastColor: Colors.yellow[300],
+            borderColor: Colors.orange,
           );
+        }
+      } else if (status.isDenied) {
+        toastMessage(
+          context: context,
+          message: "Permission denied. Cannot make a call.",
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+        );
+      } else if (status.isPermanentlyDenied) {
+        // Handle permanent denial (direct user to app settings)
+        toastMessage(
+          context: context,
+          message: "Permission permanently denied. Please enable in settings.",
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+        );
+        openAppSettings();
       }
-    } 
-    else {
+    } else {
       toastMessage(
-            context: context,
-            message: "Please enter a valid phone number.",
-            leadingIcon: const Icon(Icons.error),
-            toastColor: Colors.red[200],
-            borderColor: Colors.red,
-          );
+        context: context,
+        message: "Please enter a valid phone number.",
+        leadingIcon: const Icon(Icons.error),
+        toastColor: Colors.red[200],
+        borderColor: Colors.red,
+      );
     }
   }
 
@@ -50,7 +78,10 @@ class FavPersonCallScreenState extends State<FavPersonCallScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              const Text('Call Your Favourite Person', style: TextStyle(fontSize: 27,color: blueColor, fontWeight: FontWeight.bold),),
+              const Text(
+                'Call Your Favourite Person', 
+                style: TextStyle(fontSize: 27, color: blueColor, fontWeight: FontWeight.bold),
+              ),
               Center(
                 child: Image.asset(
                   "assets/call/fav_screen.jpg",
@@ -63,9 +94,9 @@ class FavPersonCallScreenState extends State<FavPersonCallScreen> {
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(20.0), 
+                      borderRadius: BorderRadius.circular(20.0),
                       border: Border.all(
-                        color: Colors.grey, 
+                        color: Colors.grey,
                         width: 1.0,
                       ),
                     ),
@@ -88,31 +119,29 @@ class FavPersonCallScreenState extends State<FavPersonCallScreen> {
                       ],
                     ),
                   ),
-              // Phone Number Input
-              Expanded(
-                child: CustomTextFormField(
-                  label: "Phone Number",
-                  hinttext: "Enter Phone Number", 
-                  controller: phoneController, 
-                  prefixicon: Icons.call,
-                  keyboard: TextInputType.number,
-                ),
+                  // Phone Number Input
+                  Expanded(
+                    child: CustomTextFormField(
+                      label: "Phone Number",
+                      hinttext: "Enter Phone Number", 
+                      controller: phoneController, 
+                      prefixicon: Icons.call,
+                      keyboard: TextInputType.number,
+                    ),
+                  ),
+                ],
               ),
-              ]
-            ),
-            
               const SizedBox(height: 16),
               
               // Call Button
               CustomElevatedButton(
                 text: "Call",
                 onPressed: _makeCall,
-                )
+              ),
             ],
           ),
         ),
       ),
-      resizeToAvoidBottomInset: false,
     );
   }
 }

@@ -71,45 +71,45 @@ class AuthService {
 
   // Signup with Google
   Future<String> handleSignUpWithGoogle() async {
-    String res = "";
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) {
-        return "Google sign-in aborted.";
-      }
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      final UserCredential userCredential = await auth.signInWithCredential(credential);
-      final User user = userCredential.user!;
-
-
-      final DocumentSnapshot userDoc =
-          await firestore.collection('users').doc(user.uid).get();
-      if (!userDoc.exists) {
-        UserModel data = UserModel(
-          uid: user.uid,
-          name: user.displayName ?? "Unknown",
-          email: user.email ?? "No email",
-          phonenumber: user.phoneNumber ?? "",
-          photoURL: user.photoURL ?? "",
-        );
-        await firestore.collection('users').doc(user.uid).set(data.toMap());
-      }
-       else {
-        await firestore.collection('users').doc(user.uid).update({
-          'lastSignIn': FieldValue.serverTimestamp(),
-        });
-      }
-      res = "success";
-    } catch (e) {
-      res = "Error signing in with Google: ${e.toString()}";
+  String res = "";
+  try {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    if (googleUser == null) {
+      return "Google sign-in aborted.";
     }
-    return res;
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+    final User user = userCredential.user!;
+
+    final DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    if (!userDoc.exists) {
+      UserModel data = UserModel(
+        uid: user.uid,
+        name: user.displayName ?? "Unknown",
+        email: user.email ?? "No email",
+        phonenumber: user.phoneNumber ?? "",
+        photoURL: user.photoURL ?? "",
+      );
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set(data.toMap());
+    } else {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+        'lastSignIn': FieldValue.serverTimestamp(),
+      });
+    }
+    res = "success";
+  } catch (e) {
+    res = "Error signing in with Google: ${e.toString()}";
   }
+  return res;
+}
+
 
   // Forgot Password
   Future<String> resetPassword(String email) async {

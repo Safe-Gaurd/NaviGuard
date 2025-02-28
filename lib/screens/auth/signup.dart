@@ -1,3 +1,4 @@
+import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
@@ -37,14 +38,14 @@ class SignupScreenState extends State<SignupScreen> {
   }
 
   void signUpEmail() async {
-    if (!formKey.currentState!.validate()){
+    if (!formKey.currentState!.validate()) {
       toastMessage(
           context: context,
           message: 'Fill All Fields!',
           leadingIcon: const Icon(Icons.message),
           toastColor: Colors.yellow[300],
           borderColor: Colors.orange,
-      );
+          position: DelightSnackbarPosition.top);
       return;
     }
 
@@ -62,25 +63,28 @@ class SignupScreenState extends State<SignupScreen> {
 
       if (res == "success") {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen(isLoginOrSignUp: true,)),
+          MaterialPageRoute(
+              builder: (context) => const HomeScreen(
+                    isLoginOrSignUp: true,
+                  )),
         );
       } else {
         toastMessage(
-          context: context,
-          message: res,
-          leadingIcon: const Icon(Icons.message),
-          toastColor: Colors.yellow[300],
-          borderColor: Colors.orange,
-        );
+            context: context,
+            message: res,
+            leadingIcon: const Icon(Icons.message),
+            toastColor: Colors.yellow[300],
+            borderColor: Colors.orange,
+            position: DelightSnackbarPosition.top);
       }
     } catch (e) {
       toastMessage(
-        context: context,
-        message: e.toString(),
-        leadingIcon: const Icon(Icons.error),
-        toastColor: Colors.red[200],
-        borderColor: Colors.red,
-      );
+          context: context,
+          message: e.toString(),
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+          position: DelightSnackbarPosition.top);
     } finally {
       setState(() {
         isLoading = false;
@@ -88,13 +92,53 @@ class SignupScreenState extends State<SignupScreen> {
     }
   }
 
+  Future<void> signUpWithGoogle() async {
+    setState(() {
+      isgoogleLoading = true;
+    });
+    try{
+        String res = await authService.handleSignUpWithGoogle();
+
+        if (res == "success") {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else {
+          toastMessage(
+          context: context,
+          message: res,
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+          position: DelightSnackbarPosition.top);
+        }
+    } catch (e) {
+        toastMessage(
+          context: context,
+          message: e.toString(),
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+          position: DelightSnackbarPosition.top);
+    }  
+    finally {
+      setState(() {
+        isgoogleLoading = false;
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Form(
               key: formKey,
               child: Column(
@@ -110,16 +154,17 @@ class SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       Transform.translate(
-                        offset: const Offset(0,-4),
+                        offset: const Offset(0, -4),
                         child: const Text(
                           "nboard!",
-                          style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 30.0, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
                   ),
                   Transform.translate(
-                    offset: const Offset(-12, -22), 
+                    offset: const Offset(0, -22),
                     child: const Text(
                       "Create an account to start your journey",
                       style: TextStyle(
@@ -129,20 +174,22 @@ class SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-                    
                   Image.asset(
                     "assets/auth/signup.jpg",
-                    width: 270,
-                    height: 270,
+                    width: screenWidth*0.65,
+                    height: screenHeight*.25,
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   CustomTextFormField(
                     label: "Name",
                     hinttext: "Enter Your Name",
                     controller: name,
                     prefixicon: Icons.person_2,
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Name is required' : null,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Name is required'
+                        : null,
                   ),
                   CustomTextFormField(
                     label: "Email",
@@ -171,22 +218,24 @@ class SignupScreenState extends State<SignupScreen> {
                           obscureText = !obscureText;
                         });
                       },
-                      icon: Icon(
-                          obscureText ? Icons.visibility : Icons.visibility_off),
+                      icon: Icon(obscureText
+                          ? Icons.visibility
+                          : Icons.visibility_off),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Password is required';
-                      } else if (value.length < 8) {
-                        return 'Password must be at least 8 characters';
-                      } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                        return 'Password must contain at least one uppercase letter';
-                      } else if (!RegExp(r'\d').hasMatch(value)) {
-                        return 'Password must contain at least one number';
-                      } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]')
-                          .hasMatch(value)) {
-                        return 'Password must contain at least one special character';
                       }
+                      //  else if (value.length < 8) {
+                      //   return 'Password must be at least 8 characters';
+                      // } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
+                      //   return 'Password must contain at least one uppercase letter';
+                      // } else if (!RegExp(r'\d').hasMatch(value)) {
+                      //   return 'Password must contain at least one number';
+                      // } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]')
+                      //     .hasMatch(value)) {
+                      //   return 'Password must contain at least one special character';
+                      // }
                       return null;
                     },
                   ),
@@ -201,52 +250,45 @@ class SignupScreenState extends State<SignupScreen> {
                             ? 'Please enter a valid phone number'
                             : null,
                   ),
-                  const SizedBox(height: 10,),
+                  SizedBox(
+                    height: screenHeight*.01,
+                  ),
                   LoginSignupButtons(
-                          label: "SignUP",
-                          onTap: signUpEmail,
-                          isLoading: isLoading,
-                          backgroundColor: Colors.blue[500],
-                        ),
-                  const SizedBox(height: 20,),
+                    label: "SignUP",
+                    onTap: signUpEmail,
+                    isLoading: isLoading,
+                    backgroundColor: Colors.blue[500],
+                  ),
+                  SizedBox(
+                    height: screenHeight*.015,
+                  ),
                   const Text(
                     "Or",
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 20,),
+                  SizedBox(
+                    height: screenHeight*.015,
+                  ),
                   LoginSignupButtons(
                     imagepath: "assets/auth/google.jpg",
                     label: "SignUP With Google",
-                    onTap: (){
-                      setState(() {
-                        isgoogleLoading = true;
-                      });
-                      String res=authService.handleSignUpWithGoogle().toString();
-                      res=="success"
-                      ? Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => const HomeScreen()),
-                        )
-                      : toastMessage(context: context, message: res);
-
-                      setState(() {
-                          isgoogleLoading = false;
-                        });
-
-                    },
+                    onTap: signUpWithGoogle,
                     isLoading: isgoogleLoading,
                   ),
-                  const SizedBox(height: 10),
                   TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const LoginScreen()));
-                        },
-                        child: const Text(
-                          "Already Have an Account?",
-                          style: TextStyle(color: Colors.red, fontSize: 15),
-                        ),
-                      )
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const LoginScreen()));
+                    },
+                    child: const Text(
+                      "Already Have an Account?",
+                      style: TextStyle(color: Colors.red, fontSize: 15),
+                    ),
+                  ),
+                  SizedBox(
+                    height: screenHeight*.05,
+                  ),
                 ],
               ),
             ),

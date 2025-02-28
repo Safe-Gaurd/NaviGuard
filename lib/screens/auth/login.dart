@@ -1,3 +1,4 @@
+import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:navigaurd/backend/auth/auth_methods.dart';
 import 'package:navigaurd/constants/colors.dart';
@@ -41,6 +42,7 @@ class LoginScreenState extends State<LoginScreen>
             leadingIcon: const Icon(Icons.message),
           toastColor: Colors.yellow[300],
           borderColor: Colors.orange,
+          position: DelightSnackbarPosition.top
           );
       return;
     }
@@ -61,6 +63,7 @@ class LoginScreenState extends State<LoginScreen>
             leadingIcon: const Icon(Icons.error),
             toastColor: Colors.red[200],
             borderColor: Colors.red,
+            position: DelightSnackbarPosition.top
           );
     }
     setState(() {
@@ -69,19 +72,61 @@ class LoginScreenState extends State<LoginScreen>
 
   }
 
+  Future<void> loginWithGoogle() async{
+    setState(() {
+      isgoogleLoading=true;
+    });
+    try{
+        String res = await authService.handleSignUpWithGoogle();
+
+        if (res == "success") {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else {
+          toastMessage(
+          context: context,
+          message: res,
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+          position: DelightSnackbarPosition.top);
+        }
+    } catch (e) {
+        toastMessage(
+          context: context,
+          message: e.toString(),
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+          position: DelightSnackbarPosition.top);
+    }  
+    finally {
+      setState(() {
+        isgoogleLoading = false;
+      });
+    }  
+    setState(() {
+      isgoogleLoading=false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Form(
               key: formKey,
               child: Column(
                 children: [
                   
-                  const SizedBox(height: 20.0),
+                  SizedBox(height: screenHeight*0.03),
                   const Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
@@ -110,13 +155,15 @@ class LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                   ),
-
+              
                   Image.asset(
                     "assets/auth/login.jpg",
-                    width: 300, 
-                    height: 310, 
+                    width: screenWidth*0.7, 
+                    height: screenHeight*0.25, 
                   ),
               
+                  SizedBox(height: screenHeight*0.02),
+
                   CustomTextFormField(
                     label: "Email", 
                     hinttext: "Enter Your Email", 
@@ -153,8 +200,8 @@ class LoginScreenState extends State<LoginScreen>
                       return null;
                     }
                   ),
-
-                  const SizedBox(height: 10,),
+              
+                  SizedBox(height: screenHeight*0.01),
                   LoginSignupButtons(
                           label: "LogIn",
                           onTap: loginWithEmail,
@@ -170,26 +217,14 @@ class LoginScreenState extends State<LoginScreen>
               
                   const Text("Or",style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
               
-                  const SizedBox(height: 20,),
+                  SizedBox(height: screenHeight*0.01),
                   LoginSignupButtons(
                     imagepath: "assets/auth/google.jpg", 
                     label: "Login With Google", 
-                    onTap: (){
-                      setState(() {
-                        isgoogleLoading=true;
-                      });
-
-                      String res=authService.handleSignUpWithGoogle().toString();
-                      if(res=="success")
-                      {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeScreen()));
-                        return;
-                      }
-                      toastMessage(context: context, message: res);
-                      isLoading = !isgoogleLoading;
-                    }),
-
-                  const SizedBox(height: 10,),
+                    onTap: loginWithGoogle,
+                  ),
+              
+                  // SizedBox(height: screenHeight*0.02,),
                   TextButton(onPressed: (){
                           Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupScreen()));
                         }, 

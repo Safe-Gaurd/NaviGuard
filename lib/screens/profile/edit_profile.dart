@@ -1,8 +1,8 @@
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:navigaurd/constants/imagepicker_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:navigaurd/backend/providers/user_provider.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
@@ -21,7 +21,6 @@ class EditProfileScreen extends StatelessWidget {
           child: CircularProgressIndicator()
           )
         : Scaffold(
-          resizeToAvoidBottomInset: true,
           appBar: AppBar(
             backgroundColor: blueColor,
             title: const Text(
@@ -40,20 +39,22 @@ class EditProfileScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   Stack(
                     children: [
-                      provider.profileImage != null
-                          ? CircleAvatar(
-                              radius: 60,
-                              backgroundImage:
-                                  MemoryImage(provider.profileImage!))
-                          : CircleAvatar(
-                              radius: 60,
-                              backgroundColor: blueColor,
-                              child: Text(
-                                provider.user.name[0],
-                                style: const TextStyle(
-                                    fontSize: 40, fontWeight: FontWeight.bold),
-                              ),
-                  ),
+                      provider.isLoading
+                      ? const CircularProgressIndicator(color: blueColor,)
+                      : provider.photoURL==null
+                        ? CircleAvatar(
+                            radius: 60,
+                            backgroundColor: blueColor,
+                            child: Text(
+                              provider.user.name[0],
+                              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        : CircleAvatar(
+                            radius: 60,
+                            backgroundImage: NetworkImage(provider.photoURL!),
+                          ),
+
                       Positioned(
                         bottom: 0,
                         right: 0,
@@ -61,7 +62,7 @@ class EditProfileScreen extends StatelessWidget {
                           backgroundColor: Colors.white,
                           child: IconButton(
                             onPressed: () {
-                              showImagePicker(context, provider);
+                              ImagepickerDialog().showImagePicker(context, provider);
                             },
                             icon: const Icon(Icons.edit),
                           ),
@@ -135,7 +136,6 @@ class EditProfileScreen extends StatelessWidget {
                         name: nameController.text, 
                         email: emailController.text, 
                         phonenumber: phoneNumberController.text, 
-                        photoURL: provider.photoURL ?? provider.user.photoURL!, 
                         location: locationController.text
                       );
                           
@@ -152,72 +152,4 @@ class EditProfileScreen extends StatelessWidget {
     );
   }
 
-
-  void showImagePicker(BuildContext context, UserProvider provider) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'Select Image',
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16.0),
-                ListTile(
-                  leading: const Icon(
-                    Icons.photo_library,
-                    // color: Colors.blue,
-                  ),
-                  title: const Text(
-                    'Gallery',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () {
-                    provider.selectImage(ImageSource.gallery);
-                    Navigator.of(context).pop();
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.camera_alt,
-                    // color: Colors.blue,
-                  ),
-                  title: const Text(
-                    'Camera',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () {
-                    provider.selectImage(ImageSource.camera);
-                    Navigator.of(context).pop();
-                  },
-                ),
-                // const SizedBox(height: 16.0),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel'),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 }
