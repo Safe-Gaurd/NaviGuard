@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CustomCardButton extends StatelessWidget {
-    final String title;
-    final String imagePath;
-    final LinearGradient? gradient;
-    final void Function()? onTap;
-    final double? width;
-    final double? height;
-
+  final String title;
+  final String imagePath;
+  final LinearGradient? gradient;
+  final void Function()? onTap;
+  final double? width;
+  final double? height;
 
   const CustomCardButton({
     super.key,
@@ -17,12 +16,16 @@ class CustomCardButton extends StatelessWidget {
     this.onTap,
     this.width,
     this.height,
-    });
+  });
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double buttonWidth = screenWidth * .25;
+    double buttonHeight = screenHeight * 0.12;
     return GestureDetector(
-      onTap: onTap ?? () {}, 
+      onTap: onTap ?? () {},
       child: Card(
         elevation: 10,
         shape: RoundedRectangleBorder(
@@ -30,28 +33,27 @@ class CustomCardButton extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-            gradient: gradient, 
+            gradient: gradient,
             borderRadius: BorderRadius.circular(20),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8), 
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ClipOval(
                 child: Image.asset(
                   imagePath,
-                  width: width ?? 100,
-                  height: height ?? 100,
+                  width: width ?? buttonWidth,
+                  height: height ?? buttonHeight,
                   fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: buttonHeight*0.05),
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white, 
+                  color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),

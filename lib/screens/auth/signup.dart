@@ -92,14 +92,53 @@ class SignupScreenState extends State<SignupScreen> {
     }
   }
 
+  Future<void> signUpWithGoogle() async {
+    setState(() {
+      isgoogleLoading = true;
+    });
+    try{
+        String res = await authService.handleSignUpWithGoogle();
+
+        if (res == "success") {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else {
+          toastMessage(
+          context: context,
+          message: res,
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+          position: DelightSnackbarPosition.top);
+        }
+    } catch (e) {
+        toastMessage(
+          context: context,
+          message: e.toString(),
+          leadingIcon: const Icon(Icons.error),
+          toastColor: Colors.red[200],
+          borderColor: Colors.red,
+          position: DelightSnackbarPosition.top);
+    }  
+    finally {
+      setState(() {
+        isgoogleLoading = false;
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Form(
               key: formKey,
               child: Column(
@@ -137,8 +176,8 @@ class SignupScreenState extends State<SignupScreen> {
                   ),
                   Image.asset(
                     "assets/auth/signup.jpg",
-                    width: 270,
-                    height: 270,
+                    width: screenWidth*0.65,
+                    height: screenHeight*.25,
                   ),
                   const SizedBox(
                     height: 20,
@@ -211,8 +250,8 @@ class SignupScreenState extends State<SignupScreen> {
                             ? 'Please enter a valid phone number'
                             : null,
                   ),
-                  const SizedBox(
-                    height: 10,
+                  SizedBox(
+                    height: screenHeight*.01,
                   ),
                   LoginSignupButtons(
                     label: "SignUP",
@@ -220,40 +259,23 @@ class SignupScreenState extends State<SignupScreen> {
                     isLoading: isLoading,
                     backgroundColor: Colors.blue[500],
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: screenHeight*.015,
                   ),
                   const Text(
                     "Or",
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: screenHeight*.015,
                   ),
                   LoginSignupButtons(
                     imagepath: "assets/auth/google.jpg",
                     label: "SignUP With Google",
-                    onTap: () {
-                      setState(() {
-                        isgoogleLoading = true;
-                      });
-                      String res =
-                          authService.handleSignUpWithGoogle().toString();
-                      res == "success"
-                          ? Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()),
-                            )
-                          : toastMessage(context: context, message: res);
-
-                      setState(() {
-                        isgoogleLoading = false;
-                      });
-                    },
+                    onTap: signUpWithGoogle,
                     isLoading: isgoogleLoading,
                   ),
-                  const SizedBox(height: 10),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
@@ -263,7 +285,10 @@ class SignupScreenState extends State<SignupScreen> {
                       "Already Have an Account?",
                       style: TextStyle(color: Colors.red, fontSize: 15),
                     ),
-                  )
+                  ),
+                  SizedBox(
+                    height: screenHeight*.05,
+                  ),
                 ],
               ),
             ),

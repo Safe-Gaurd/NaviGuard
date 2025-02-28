@@ -17,9 +17,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void initState() {
     super.initState();
     // Initialize the video player controller with the video URL
-    _controller = VideoPlayerController.network(widget.videoURL)
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoURL))
       ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized
         setState(() {});
       });
   }

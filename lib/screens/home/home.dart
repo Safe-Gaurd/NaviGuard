@@ -90,7 +90,7 @@ class HomeScreenState extends State<HomeScreen> {
               appBar: const CustomAppbar(
                 label: "",
               ),
-              drawer: customNavigationBar(provider: userProvider),
+              drawer: customSideBar(provider: userProvider),
               body: screens[currentIndex],
               bottomNavigationBar: BottomNavigationBar(
                 currentIndex: currentIndex,
@@ -125,7 +125,7 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Drawer customNavigationBar({required UserProvider provider}) {
+  Drawer customSideBar({required UserProvider provider}) {
     return Drawer(
       backgroundColor: backgroundColor,
       child: SingleChildScrollView(

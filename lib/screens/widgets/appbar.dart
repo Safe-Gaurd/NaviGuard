@@ -74,7 +74,6 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
                       backgroundImage: NetworkImage(provider.user.photoURL!),
                     )
                   : CircleAvatar(
-                      radius: 15,
                       backgroundColor: Colors.white,
                       child: Text(
                         provider.user.name[0].toUpperCase(),

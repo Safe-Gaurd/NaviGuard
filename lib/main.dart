@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/firebase_options.dart';
-import 'package:navigaurd/screens/auth/login.dart';
 import 'package:navigaurd/screens/onboarding/onboarding_main.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/app/app_provider.dart';
@@ -29,10 +28,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'SafeGuard',
         theme: ThemeData().copyWith(
-            textTheme: GoogleFonts.dmSansTextTheme(
-          Theme.of(context).textTheme,
+          scaffoldBackgroundColor: Colors.white,
+          textTheme: GoogleFonts.dmSansTextTheme(
+            Theme.of(context).textTheme,
         )),
-        // home: OnboardingMainScreen(),
+        // home: HomeScreen(),
         home: StreamBuilder(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
@@ -51,8 +51,8 @@ class MyApp extends StatelessWidget {
                 );
               }
 
-              // return const OnboardingMainScreen(); // for android
-              return const LoginScreen();
+              return const OnboardingMainScreen(); // for android
+              // return const LoginScreen();
             }),
 
         debugShowCheckedModeBanner: false,

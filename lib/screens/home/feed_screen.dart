@@ -76,7 +76,7 @@ class FeedScreenState extends State<FeedScreen> {
         updateWeatherMessage();
       });
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
     } finally {
       setState(() => isLoading = false);
     }
@@ -109,6 +109,8 @@ class FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Consumer<UserProvider>(builder: (context, provider, _) {
       return provider.isLoading
           ? const Center(child: CircularProgressIndicator(color: blueColor))
@@ -117,7 +119,7 @@ class FeedScreenState extends State<FeedScreen> {
                 child: Column(
                   children: [
                     Container(
-                      height: 250,
+                      height: screenHeight * .3,
                       width: double.infinity,
                       decoration: const BoxDecoration(
                         color: blueColor,
@@ -137,18 +139,18 @@ class FeedScreenState extends State<FeedScreen> {
                                 const Text(
                                   "Welcome!",
                                   style: TextStyle(
-                                      fontSize: 30,
+                                      fontSize: 27,
                                       fontWeight: FontWeight.bold,
                                       color: backgroundColor),
                                 ),
                                 Text(
-                                  provider.user.name,
+                                  provider.user.name.split(' ')[0],
                                   style: const TextStyle(
-                                      fontSize: 25,
+                                      fontSize: 24,
                                       fontWeight: FontWeight.bold,
                                       color: backgroundColor),
                                 ),
-                                const SizedBox(height: 90),
+                                SizedBox(height: screenHeight * .12),
                                 Text(
                                   weatherMessage,
                                   style: const TextStyle(
@@ -160,11 +162,11 @@ class FeedScreenState extends State<FeedScreen> {
                             ),
                           ),
                           Positioned(
-                            top: -15,
-                            right: -25,
+                            top: screenHeight*0.01,
+                            right: -10,
                             child: SizedBox(
-                              width: 285,
-                              height: 180,
+                              width: screenWidth * .7,
+                              height: screenHeight * .2,
                               child: Lottie.asset(
                                 "assets/home/driving.json",
                               ),
@@ -177,7 +179,7 @@ class FeedScreenState extends State<FeedScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: SizedBox(
-                        height: 200,
+                        height: screenHeight*0.2,
                         child: PageView(
                           controller: controller,
                           children: [
@@ -229,12 +231,13 @@ class FeedScreenState extends State<FeedScreen> {
   }
 
   Widget customCard(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: 600,
+      height: screenHeight*.88,
       child: GridView.count(
         crossAxisCount: 2,
-        mainAxisSpacing: 15,
-        crossAxisSpacing: 15,
+        mainAxisSpacing: screenHeight*0.01,
+        crossAxisSpacing: screenHeight*0.01,
         physics: NeverScrollableScrollPhysics(),
         children: [
           CustomCardButton(
@@ -262,14 +265,6 @@ class FeedScreenState extends State<FeedScreen> {
                 colors: [Colors.purple[300]!, Colors.pink[400]!]),
           ),
           CustomCardButton(
-            title: "Reports Analysis",
-            imagePath: "assets/home/accident_analysis.jpg",
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ReportAnalysisScreen())),
-            gradient: LinearGradient(
-                colors: [Colors.orange[300]!, Colors.orange[600]!]),
-          ),
-          CustomCardButton(
             title: "Emergency",
             imagePath: "assets/home/emergency.jpg",
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -278,12 +273,34 @@ class FeedScreenState extends State<FeedScreen> {
                 LinearGradient(colors: [Colors.red[300]!, Colors.red[600]!]),
           ),
           CustomCardButton(
+            title: "Reports Analysis",
+            imagePath: "assets/home/accident_analysis.jpg",
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ReportAnalysisScreen())),
+            gradient: LinearGradient(
+                colors: [Colors.orange[300]!, Colors.orange[600]!]),
+          ),
+          CustomCardButton(
             title: "Insurance",
             imagePath: "assets/home/insurance.jpg",
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const InsuranceScreen())),
             gradient: LinearGradient(
                 colors: [Colors.indigo[300]!, Colors.purple[600]!]),
+          ),
+          CustomCardButton(
+            title: "Blood Bank",
+            imagePath: "assets/home/blood_bank.jpeg",
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => MapScreen())),
+            gradient: LinearGradient(colors: [Colors.pink[300]!, Colors.pink[500]!]),
+          ),
+          CustomCardButton(
+            title: "Hospitals",
+            imagePath: "assets/home/hospitals.jpg",
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => MapScreen())),
+            gradient:LinearGradient(colors: [Colors.lightBlueAccent, Colors.blueAccent]),
           ),
         ],
       ),

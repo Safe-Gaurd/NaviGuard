@@ -10,10 +10,10 @@ class CustomElevatedButton extends StatelessWidget
   final VoidCallback? onPressed;
   final double? borderRadius;
   final TextStyle? textStyle;
-  bool isIcon;
+  final bool isIcon;
   final IconData? icon;
 
-  CustomElevatedButton({
+  const CustomElevatedButton({
     super.key,
     this.backgroundColor,
     this.foregroundColor,

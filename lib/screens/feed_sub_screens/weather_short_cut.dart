@@ -21,11 +21,13 @@ class WeatherWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth*0.05),
       child: Container(
-        padding: const EdgeInsets.only(left: 10),
-        height: 180,
+        padding: EdgeInsets.only(left: screenWidth*0.05),
+        height: screenHeight*.2,
         width: double.infinity,
         decoration: BoxDecoration(
           color: backgroundColor,
@@ -49,11 +51,10 @@ class WeatherWidget extends StatelessWidget {
                   weatherCondition,
                   style: const TextStyle(
                     color: blueColor,
-                    fontSize: 18,
+                    fontSize: 23,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 5),
                 Text(
                   temperature,
                   style: const TextStyle(
@@ -62,7 +63,6 @@ class WeatherWidget extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 5),
                 Row(
                   children: [
                     const Icon(Icons.calendar_today,
@@ -72,7 +72,7 @@ class WeatherWidget extends StatelessWidget {
                       date,
                       style: const TextStyle(
                         color: blueColor,
-                        fontSize: 14,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -97,12 +97,10 @@ class WeatherWidget extends StatelessWidget {
             // Weather Icon Section
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                iconPath,
-                fit: BoxFit.cover,
-                width: 130,
-                height: 150,
-              ),
+              child: Image.asset(iconPath,
+                  fit: BoxFit.cover,
+                  width: screenWidth * .3,
+                  height: screenHeight * .7),
             ),
           ],
         ),
