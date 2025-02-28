@@ -151,7 +151,7 @@ class MapScreenState extends State<MapScreen> {
               child:
                   const Text('Source', style: TextStyle(color: Colors.white)),
             ),
-          SizedBox(width: 20),
+          SizedBox(width: 10),
           if (_destination != null)
             TextButton(
               onPressed: () => _googleMapController.animateCamera(

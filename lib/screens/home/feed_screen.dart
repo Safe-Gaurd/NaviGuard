@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:navigaurd/screens/blood_bank/blood_bank.dart';
 import 'package:navigaurd/screens/dash_cam/dash_cam.dart';
 import 'package:navigaurd/screens/feed_sub_screens/insurance.dart';
 import 'package:navigaurd/screens/feed_sub_screens/weather_short_cut.dart';
 import 'package:navigaurd/screens/home/widgets/adv_container.dart';
+import 'package:navigaurd/screens/hospitals/hospitals.dart';
 import 'package:navigaurd/screens/maps/maps.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/backend/models/weather.dart';
@@ -292,14 +294,14 @@ class FeedScreenState extends State<FeedScreen> {
             title: "Blood Bank",
             imagePath: "assets/home/blood_bank.jpeg",
             onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => MapScreen())),
+                .push(MaterialPageRoute(builder: (context) => BloodBanksMapScreen())),
             gradient: LinearGradient(colors: [Colors.pink[300]!, Colors.pink[500]!]),
           ),
           CustomCardButton(
             title: "Hospitals",
             imagePath: "assets/home/hospitals.jpg",
             onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => MapScreen())),
+                .push(MaterialPageRoute(builder: (context) => HospitalsMapScreen())),
             gradient:LinearGradient(colors: [Colors.lightBlueAccent, Colors.blueAccent]),
           ),
         ],

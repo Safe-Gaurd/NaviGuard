@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.dmSansTextTheme(
             Theme.of(context).textTheme,
         )),
-        // home: HomeScreen(),
+        // home: HospitalsMapScreen(),
         home: StreamBuilder(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
