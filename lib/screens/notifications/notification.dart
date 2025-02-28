@@ -6,13 +6,30 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CustomAppbar(label: "Notification"),
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return Scaffold(
+      appBar: const CustomAppbar(label: "Notifications"),
       body: Center(
-        child: Text("Notification"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+                width: screenWidth,
+                height: screenHeight * 0.3,
+                child: Image.asset("assets/notifications/no_notifications.jpg")),
+            const SizedBox(height: 16),
+            const Text(
+              "No Notifications",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
-
-
 }
