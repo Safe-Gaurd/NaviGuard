@@ -1,20 +1,13 @@
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
-import 'package:navigaurd/screens/auth/selection.dart';
 import 'package:navigaurd/screens/chat/community_chat.dart';
 import 'package:navigaurd/screens/maps/maps.dart';
 import 'package:provider/provider.dart';
-import 'package:navigaurd/backend/auth/auth_methods.dart';
 import 'package:navigaurd/backend/providers/user_provider.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
 import 'package:navigaurd/screens/home/feed_screen.dart';
-import 'package:navigaurd/screens/widgets/nav_bars/navbaritems.dart';
-import 'package:navigaurd/screens/notifications/notification.dart';
 import 'package:navigaurd/screens/profile/user_profile.dart';
-import 'package:navigaurd/screens/settings/settings.dart';
-import 'package:navigaurd/constants/logout_dialog.dart';
-import 'package:navigaurd/screens/widgets/nav_bars/appbar.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool isLoginOrSignUp;
@@ -41,22 +34,6 @@ class HomeScreenState extends State<HomeScreen> {
         position: DelightSnackbarPosition.top,
       );
     }
-
-    // // Delayed execution for dialogs
-    // Future.delayed(const Duration(seconds: 1), () {
-    //   const CustomDialog().showLogoutDialog(
-    //     context: context,
-    //     label: "Notifications",
-    //     message: "Allow SafeGaurd to send notifications",
-    //     option1: "Allow",
-    //     onPressed1: () {
-    //       Navigator.of(context).pop();
-    //     },
-    //     option2: "Deny",
-    //     onPressed2: () {
-    //     },
-    //   );
-    // });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getData();
@@ -89,10 +66,6 @@ class HomeScreenState extends State<HomeScreen> {
             )
           : Scaffold(
               key: _scaffoldKey,
-              // appBar: const CustomAppbar(
-              //   label: "",
-              // ),
-              // drawer: customSideBar(provider: userProvider),
               body: screens[currentIndex],
               bottomNavigationBar: BottomNavigationBar(
                 currentIndex: currentIndex,
@@ -131,93 +104,4 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // Drawer customSideBar({required UserProvider provider}) {
-  //   return Drawer(
-  //     backgroundColor: backgroundColor,
-  //     child: SingleChildScrollView(
-  //       child: Column(
-  //         children: [
-  //           UserAccountsDrawerHeader(
-  //             decoration: const BoxDecoration(color: blueColor),
-  //             onDetailsPressed: () => Navigator.of(context).push(
-  //                 MaterialPageRoute(
-  //                     builder: (context) => const UserProfileScreen())),
-  //             accountName: Text(
-  //               provider.user.name,
-  //               style:
-  //                   const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-  //             ),
-  //             accountEmail: Text(
-  //               provider.user.email,
-  //               style:
-  //                   const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-  //             ),
-  //             currentAccountPicture: provider.user.photoURL != ''
-  //                 ? CircleAvatar(
-  //                     backgroundImage: NetworkImage(provider.user.photoURL!),
-  //                   )
-  //                 : CircleAvatar(
-  //                     child: Text(
-  //                       provider.user.name[0],
-  //                       style: const TextStyle(
-  //                           fontSize: 24, fontWeight: FontWeight.bold),
-  //                     ),
-  //                   ),
-  //           ),
-  //           const SizedBox(height: 10),
-
-  //           Navbaritems(
-  //             icon: Icons.home,
-  //             label: "Home",
-  //             onTap: () {
-  //               Navigator.of(context).push(MaterialPageRoute(
-  //                   builder: (context) => const HomeScreen()));
-  //             },
-  //           ),
-  //           // Navbaritems(icon: Icons.person, label: "Profile", onTap: () {
-  //           //     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const UserProfileScreen()));
-  //           //   },),
-  //           Navbaritems(
-  //             icon: Icons.notifications,
-  //             label: "Notifications",
-  //             onTap: () {
-  //               Navigator.of(context).push(MaterialPageRoute(
-  //                   builder: (context) => const NotificationScreen()));
-  //             },
-  //           ),
-  //           Navbaritems(
-  //             icon: Icons.settings,
-  //             label: "Settings",
-  //             onTap: () {
-  //               Navigator.of(context).push(MaterialPageRoute(
-  //                   builder: (context) => const SettingsScreen()));
-  //             },
-  //           ),
-  //           Navbaritems(
-  //             icon: Icons.logout,
-  //             label: "SignOut",
-  //             onTap: () {
-  //               const CustomDialog().showLogoutDialog(
-  //                 context: context,
-  //                 label: "LogOut",
-  //                 message: "Are you sure you want to  Log Out?",
-  //                 option2: "Cancel",
-  //                 onPressed2: () {
-  //                   Navigator.of(context).pop();
-  //                 },
-  //                 option1: "Yes",
-  //                 onPressed1: () {
-  //                   AuthService().logout();
-  //                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-  //                       builder: (context) => const UserTypeSelectionScreen()));
-  //                 },
-  //               );
-  //             },
-  //             labelColor: Colors.red,
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 }

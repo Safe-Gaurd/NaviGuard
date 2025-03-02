@@ -1,26 +1,34 @@
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:navigaurd/constants/colors.dart';
+import 'package:navigaurd/screens/ai_chat_bot/widgets/typing_indicator.dart';
+import 'package:navigaurd/screens/maps/maps.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
-import 'widgets/typing_indicator.dart';
 
 class ChatMessage {
   final String text;
   final bool isUser;
   final DateTime timestamp;
+  final bool isNavigation;
+  final String? mapCommand;
 
-  ChatMessage({required this.text, required this.isUser, DateTime? timestamp})
-      : timestamp = timestamp ?? DateTime.now();
+  ChatMessage({
+    required this.text, 
+    required this.isUser, 
+    DateTime? timestamp,
+    this.isNavigation = false,
+    this.mapCommand,
+  }) : timestamp = timestamp ?? DateTime.now();
 }
 
-// Enhanced AiProvider with chat functionality
+// Enhanced ChatProvider with navigation support
 class ChatProvider extends ChangeNotifier {
   final List<ChatMessage> _messages = [];
   bool _isTyping = false;
   final ScrollController scrollController = ScrollController();
+  final String apiBaseUrl = 'https://ai-assisstance-chatbot.onrender.com/'; 
 
   // Getters
   List<ChatMessage> get messages => _messages;
@@ -37,11 +45,50 @@ class ChatProvider extends ChangeNotifier {
     scrollToBottom();
 
     try {
-      // Use the existing text_to_text endpoint
-      final result = await _getTextResponse(text);
+      // Call the API endpoint
+      final response = await http.post(
+        Uri.parse('$apiBaseUrl/text_to_text_chat'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'prompt': text}),
+      );
 
-      // Add AI response
-      _messages.add(ChatMessage(text: result, isUser: false));
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        final String aiMessage = responseData['result'];
+        final bool isNavigation = responseData['is_navigation'] ?? false;
+        
+        // Check if there's a map command in the response
+        String? mapCommand;
+        if (aiMessage.contains("MAP_SCREEN:")) {
+          final lines = aiMessage.split('\n');
+          for (final line in lines) {
+            if (line.trim().startsWith("MAP_SCREEN:")) {
+              mapCommand = line.trim();
+              break;
+            }
+          }
+        }
+        
+        // Clean the message (remove map command if present)
+        final cleanMessage = mapCommand != null 
+            ? aiMessage.replaceAll(mapCommand, '').trim() 
+            : aiMessage;
+        
+        // Add AI response
+        _messages.add(ChatMessage(
+          text: cleanMessage, 
+          isUser: false,
+          isNavigation: isNavigation,
+          mapCommand: mapCommand,
+        ));
+        
+        // Handle navigation command if present
+        if (mapCommand != null) {
+          _handleMapCommand(mapCommand);
+        }
+      } else {
+        throw Exception('Server error: ${response.statusCode}');
+      }
     } catch (e) {
       // Add error message
       _messages.add(ChatMessage(
@@ -54,20 +101,32 @@ class ChatProvider extends ChangeNotifier {
       scrollToBottom();
     }
   }
-
-  // Call the text_to_text API
-  Future<String> _getTextResponse(String prompt) async {
-    // Using your existing API client
-    final response = await http.post(
-      Uri.parse('http://10.0.43.124:5000/text_to_text'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'prompt': prompt}),
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body)['result'];
-    } else {
-      throw Exception('Failed to get response: ${response.statusCode}');
+  
+  // Handle map commands by launching navigation
+  void _handleMapCommand(String command) {
+    // Example: MAP_SCREEN:destination=Hospital General;mode=driving
+    try {
+      final params = command.replaceFirst('MAP_SCREEN:', '').split(';');
+      final Map<String, String> paramMap = {};
+      
+      for (final param in params) {
+        final parts = param.split('=');
+        if (parts.length == 2) {
+          paramMap[parts[0]] = parts[1];
+        }
+      }
+      
+      final destination = paramMap['destination'];
+      final mode = paramMap['mode'] ?? 'driving';
+      
+      if (destination != null) {
+        // Here you would typically navigate to your map screen
+        // For this example, we'll print what would happen
+        print('Navigating to: $destination in mode: $mode');
+        
+      }
+    } catch (e) {
+      print('Error handling map command: $e');
     }
   }
 
@@ -89,9 +148,9 @@ class ChatProvider extends ChangeNotifier {
   }
 }
 
-// Stateless Chat Screen
+// Stateful Chat Screen
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +161,7 @@ class ChatScreen extends StatelessWidget {
   }
 }
 
-// Actual content of the chat screen
+// Content of the chat screen
 class _ChatScreenContent extends StatelessWidget {
   const _ChatScreenContent();
 
@@ -114,7 +173,7 @@ class _ChatScreenContent extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('AI Assistant'),
+        title: const Text('NaviGuard Assistant'),
         backgroundColor: blueColor,
         centerTitle: true,
         actions: [
@@ -148,7 +207,7 @@ class _ChatScreenContent extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Ask a question or just say hello',
+                  'Welcome to NaviGuard Assistant',
                   style: TextStyle(
                     color: Colors.grey.shade500,
                     fontSize: 16,
@@ -157,7 +216,7 @@ class _ChatScreenContent extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "I'm here to help you!",
+                  "I'm here to help with navigation and safety!",
                   style: TextStyle(
                     color: Colors.grey.shade500,
                     fontSize: 14,
@@ -165,11 +224,12 @@ class _ChatScreenContent extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "Feel free to ask about cows and their breeds.",
+                  "Ask about nearby hospitals, reporting accidents, or directions.",
                   style: TextStyle(
                     color: Colors.grey.shade500,
-                    fontSize: 14,
+                    fontSize: 12,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
@@ -209,7 +269,9 @@ class _ChatScreenContent extends StatelessWidget {
               decoration: BoxDecoration(
                 color: message.isUser
                     ? const Color(0xFF4285F4)
-                    : Colors.grey.shade100,
+                    : message.isNavigation
+                        ? Color(0xFFE3F2FD) // Light blue for navigation messages
+                        : Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
@@ -229,6 +291,38 @@ class _ChatScreenContent extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
+                  if (message.isNavigation && !message.isUser) ...[
+                    const SizedBox(height: 8),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        if (message.mapCommand != null) {
+                          // Extract destination from map command
+                          final regex = RegExp(r'destination=(.*?)(;|$)');
+                          final match = regex.firstMatch(message.mapCommand!);
+                          
+                          if (match != null && match.groupCount >= 1) {
+                            final destination = match.group(1);
+                            
+                            // Navigate to MapScreen with the extracted parameters
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MapScreen(
+                                  destination: destination!,
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      icon: const Icon(Icons.map),
+                      label: const Text('Open Map'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: blueColor,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -238,6 +332,8 @@ class _ChatScreenContent extends StatelessWidget {
       ),
     );
   }
+
+
 
   Widget _buildAvatar({required bool isUser}) {
     return Padding(
@@ -281,7 +377,7 @@ class _ChatScreenContent extends StatelessWidget {
                 controller: controller,
                 textCapitalization: TextCapitalization.sentences,
                 decoration: InputDecoration(
-                  hintText: 'Ask Your Questions Here',
+                  hintText: 'Ask about navigation, safety, or emergencies...',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: BorderSide.none,
@@ -302,16 +398,18 @@ class _ChatScreenContent extends StatelessWidget {
             const SizedBox(width: 8),
             GestureDetector(
               child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF4285F4),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Center(
-                      child: Icon(
+                padding: const EdgeInsets.all(12),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF4285F4),
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Icon(
                     Icons.send,
                     color: Colors.white,
-                  ))),
+                  ),
+                ),
+              ),
               onTap: () {
                 provider.sendMessage(controller.text);
                 controller.clear();

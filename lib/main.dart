@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/firebase_options.dart';
-import 'package:navigaurd/screens/auth/selection.dart';
 import 'package:navigaurd/screens/onboarding/onboarding_main.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/app/app_provider.dart';

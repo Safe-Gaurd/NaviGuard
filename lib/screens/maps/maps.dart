@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -14,8 +13,15 @@ import 'package:navigaurd/screens/widgets/buttons/elevated.dart';
 
 class MapScreen extends StatefulWidget {
   final LatLng? accidentCoordinates;
+  final String? destination;
+  final String? navigationMode;
 
-  const MapScreen({super.key, this.accidentCoordinates});
+  const MapScreen({
+    super.key, 
+    this.accidentCoordinates,
+    this.destination,
+    this.navigationMode,
+  });
 
   @override
   State<MapScreen> createState() => MapScreenState();
@@ -40,11 +46,102 @@ class MapScreenState extends State<MapScreen> {
   Position? _lastPosition;
   String _responseText = "";
   LatLng? _currentLocation;
+  bool _isSearching = false;
+  TextEditingController _searchController = TextEditingController();
+
+  // Map of common destinations for demo purposes
+  final Map<String, LatLng> _commonDestinations = {
+    "hospital": LatLng(16.54139376296591, 81.49596784517313),
+    "police station": LatLng(16.542356849160065, 81.52310326619684),
+    "blood bank": LatLng(16.547447471897392, 81.51946611755518),
+    "emergency services": LatLng(16.558222, 81.5525554),
+    "pharmacy": LatLng(16.573222, 81.5255554),
+    "gas station": LatLng(16.566222, 81.5355554),
+  };
 
   @override
   void initState() {
     super.initState();
-    getUserLocation();
+    getUserLocation().then((_) {
+      // Check if the screen was opened with navigation parameters
+      if (widget.destination != null && _currentLocation != null) {
+        // Set origin to current location
+        _origin = Marker(
+          markerId: const MarkerId('origin'),
+          position: _currentLocation!,
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          infoWindow: const InfoWindow(title: 'Your Location'),
+        );
+        
+        // Find destination coordinates
+        _setDestinationFromName(widget.destination!);
+      }
+    });
+  }
+
+  // Method to set destination from a name (like "hospital")
+  void _setDestinationFromName(String destinationName) {
+    // Convert to lowercase for case-insensitive matching
+    String normalizedName = destinationName.toLowerCase();
+    
+    // Try to find the destination in our predefined list
+    LatLng? destinationCoords;
+    _commonDestinations.forEach((key, value) {
+      if (normalizedName.contains(key)) {
+        destinationCoords = value;
+      }
+    });
+    
+    // If found, set the destination and calculate route
+    if (destinationCoords != null) {
+      setState(() {
+        _destination = Marker(
+          markerId: const MarkerId('destination'),
+          position: destinationCoords!,
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          infoWindow: InfoWindow(title: destinationName),
+        );
+      });
+      
+      getRoute();
+      
+      // Zoom out to show both markers
+      LatLngBounds bounds;
+      if (_origin != null && _destination != null) {
+        bounds = LatLngBounds(
+          southwest: LatLng(
+            _origin!.position.latitude < _destination!.position.latitude
+                ? _origin!.position.latitude
+                : _destination!.position.latitude,
+            _origin!.position.longitude < _destination!.position.longitude
+                ? _origin!.position.longitude
+                : _destination!.position.longitude,
+          ),
+          northeast: LatLng(
+            _origin!.position.latitude > _destination!.position.latitude
+                ? _origin!.position.latitude
+                : _destination!.position.latitude,
+            _origin!.position.longitude > _destination!.position.longitude
+                ? _origin!.position.longitude
+                : _destination!.position.longitude,
+          ),
+        );
+        
+        Future.delayed(Duration(milliseconds: 500), () {
+          _googleMapController.animateCamera(CameraUpdate.newLatLngBounds(bounds, 100));
+        });
+      }
+    } else {
+      // If not found in our predefined list, show a toast
+      toastMessage(
+        context: context,
+        message: "Destination not found: $destinationName",
+        leadingIcon: const Icon(Icons.error),
+        toastColor: Colors.red[300],
+        borderColor: Colors.red,
+        position: DelightSnackbarPosition.top,
+      );
+    }
   }
 
   Future<void> getUserLocation() async {
@@ -77,7 +174,6 @@ class MapScreenState extends State<MapScreen> {
       _currentLocation = LatLng(position.latitude, position.longitude);
       isMapLoading = false;
     });
-
   }
 
   // Function to send request to the model when location changes
@@ -130,6 +226,7 @@ class MapScreenState extends State<MapScreen> {
     // Cancel location stream when widget is disposed
     _positionStreamSubscription?.cancel();
     _googleMapController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -137,10 +234,48 @@ class MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Journey'),
+        title: _isSearching 
+            ? TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: "Search a destination...",
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(color: Colors.white70),
+                ),
+                style: TextStyle(color: Colors.white),
+                onSubmitted: (value) {
+                  if (value.isNotEmpty) {
+                    _setDestinationFromName(value);
+                    setState(() {
+                      _isSearching = false;
+                    });
+                  }
+                },
+                autofocus: true,
+              )
+            : const Text('Journey'),
         backgroundColor: blueColor,
         actions: [
-          if (_origin != null)
+          if (!_isSearching)
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                setState(() {
+                  _isSearching = true;
+                });
+              },
+            ),
+          if (_isSearching)
+            IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                setState(() {
+                  _isSearching = false;
+                  _searchController.clear();
+                });
+              },
+            ),
+          if (!_isSearching && _origin != null)
             TextButton(
               onPressed: () => _googleMapController.animateCamera(
                 CameraUpdate.newCameraPosition(
@@ -151,8 +286,9 @@ class MapScreenState extends State<MapScreen> {
               child:
                   const Text('Source', style: TextStyle(color: Colors.white)),
             ),
-          SizedBox(width: 10),
-          if (_destination != null)
+          if (!_isSearching)
+            SizedBox(width: 10),
+          if (!_isSearching && _destination != null)
             TextButton(
               onPressed: () => _googleMapController.animateCamera(
                 CameraUpdate.newCameraPosition(
@@ -253,17 +389,54 @@ class MapScreenState extends State<MapScreen> {
           ),
         ],
       ),
-      floatingActionButton: CustomElevatedButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => AccidentReportScreen(
-              coordinates: _currentLocation ?? LatLng(16.56222, 81.522555),
-            ),
-          ));
-        },
-        foregroundColor: backgroundColor,
-        backgroundColor: blueColor,
-        text: "Report An Accident",
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          CustomElevatedButton(
+            onPressed: () {
+              if (_currentLocation != null) {
+                setState(() {
+                  _origin = Marker(
+                    markerId: const MarkerId('origin'),
+                    position: _currentLocation!,
+                    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                    infoWindow: const InfoWindow(title: 'Your Location'),
+                  );
+                  
+                  // If there is a destination, calculate the route
+                  if (_destination != null) {
+                    getRoute();
+                  }
+                });
+              } else {
+                toastMessage(
+                  context: context,
+                  message: "Waiting for your location...",
+                  leadingIcon: const Icon(Icons.location_searching),
+                  toastColor: Colors.grey[300],
+                  borderColor: Colors.grey,
+                  position: DelightSnackbarPosition.top,
+                );
+              }
+            },
+            foregroundColor: backgroundColor,
+            backgroundColor: Colors.green,
+            text: "Set Current Location",
+          ),
+          SizedBox(height: 10),
+          CustomElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => AccidentReportScreen(
+                  coordinates: _currentLocation ?? LatLng(16.56222, 81.522555),
+                ),
+              ));
+            },
+            foregroundColor: backgroundColor,
+            backgroundColor: blueColor,
+            text: "Report An Accident",
+          ),
+        ],
       ),
     );
   }
@@ -348,9 +521,8 @@ class MapScreenState extends State<MapScreen> {
       // Listen to location updates
       _positionStreamSubscription = Geolocator.getPositionStream(
         locationSettings: LocationSettings(
-          accuracy:
-              LocationAccuracy.high, // This is the new way to set accuracy
-          distanceFilter: 50, // Only updates every 10 meters of movement
+          accuracy: LocationAccuracy.high,
+          distanceFilter: 50, // Only updates every 50 meters of movement
         ),
       ).listen((Position position) {
         // Only call the function if the position has changed

@@ -1,43 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:navigaurd/constants/colors.dart';
 
-class TypewriterAnimationDot extends StatefulWidget {
-  final Color color;
-  final double size;
-  final Duration delay;
-
-  const TypewriterAnimationDot({
-    super.key,
-    required this.color,
-    this.size = 8.0,
-    required this.delay,
-  });
+// Widget for typing indicator
+class GeminiStyleTypingIndicator extends StatefulWidget {
+  const GeminiStyleTypingIndicator({Key? key}) : super(key: key);
 
   @override
-  _TypewriterAnimationDotState createState() => _TypewriterAnimationDotState();
+  State<GeminiStyleTypingIndicator> createState() => _GeminiStyleTypingIndicatorState();
 }
 
-class _TypewriterAnimationDotState extends State<TypewriterAnimationDot>
-    with SingleTickerProviderStateMixin {
+class _GeminiStyleTypingIndicatorState extends State<GeminiStyleTypingIndicator> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
-
-    _animation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-
-    Future.delayed(widget.delay, () {
-      if (mounted) {
-        _controller.repeat(reverse: true);
-      }
-    });
+      duration: const Duration(milliseconds: 1500),
+    )..repeat();
   }
 
   @override
@@ -49,77 +30,64 @@ class _TypewriterAnimationDotState extends State<TypewriterAnimationDot>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _animation,
+      animation: _controller,
       builder: (context, child) {
-        return Container(
-          width: widget.size,
-          height: widget.size,
-          decoration: BoxDecoration(
-            color: widget.color.withOpacity(0.3 + (0.7 * _animation.value)),
-            borderRadius: BorderRadius.circular(widget.size / 2),
-          ),
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildAvatar(isUser: false),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                children: [
+                  _buildDot(0.0),
+                  const SizedBox(width: 4),
+                  _buildDot(0.2),
+                  const SizedBox(width: 4),
+                  _buildDot(0.4),
+                ],
+              ),
+            ),
+          ],
         );
       },
     );
   }
-}
 
-class GeminiStyleTypingIndicator extends StatelessWidget {
-  final Color primaryColor;
+  Widget _buildDot(double delay) {
+    final delayedValue = (_controller.value - delay) % 1.0;
+    final opacity = delayedValue < 0.0 ? 0.0 : (delayedValue < 0.5 ? delayedValue * 2 : (1.0 - delayedValue) * 2);
 
-  const GeminiStyleTypingIndicator({
-    super.key,
-    this.primaryColor = const Color(0xFF4285F4), // Google Blue
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      margin: const EdgeInsets.only(right: 64, left: 12, top: 4, bottom: 4),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 5,
-            offset: const Offset(0, 1),
-          ),
-        ],
+    return Opacity(
+      opacity: opacity,
+      child: Container(
+        width: 8,
+        height: 8,
+        decoration: BoxDecoration(
+          color: blueColor,
+          shape: BoxShape.circle,
+        ),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CircleAvatar(
-            radius: 16,
-            backgroundColor: primaryColor.withOpacity(0.1),
-            child: Icon(
-              Icons.smart_toy_outlined,
-              size: 16,
-              color: primaryColor,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Row(
-            children: [
-              TypewriterAnimationDot(
-                color: primaryColor,
-                delay: Duration.zero,
-              ),
-              const SizedBox(width: 5),
-              TypewriterAnimationDot(
-                color: primaryColor,
-                delay: const Duration(milliseconds: 200),
-              ),
-              const SizedBox(width: 5),
-              TypewriterAnimationDot(
-                color: primaryColor,
-                delay: const Duration(milliseconds: 400),
-              ),
-            ],
-          ),
-        ],
+    );
+  }
+
+  Widget _buildAvatar({required bool isUser}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: CircleAvatar(
+        backgroundColor: isUser
+            ? const Color(0xFF4285F4).withOpacity(0.8)
+            : Colors.grey.shade200,
+        radius: 16,
+        child: Icon(
+          isUser ? Icons.person : Icons.smart_toy_outlined,
+          color: isUser ? Colors.white : const Color(0xFF4285F4),
+          size: 18,
+        ),
       ),
     );
   }
