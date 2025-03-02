@@ -4,7 +4,6 @@ import 'package:navigaurd/backend/providers/user_provider.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/screens/notifications/notification.dart';
 import 'package:navigaurd/screens/profile/user_profile.dart';
-import 'package:navigaurd/screens/support&help/help.dart';
 
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String label;

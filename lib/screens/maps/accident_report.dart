@@ -7,7 +7,7 @@ import 'package:navigaurd/backend/providers/report.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
 import 'package:navigaurd/screens/auth/widgets/customtextformfield.dart';
-import 'package:navigaurd/screens/widgets/appbar.dart';
+import 'package:navigaurd/screens/widgets/nav_bars/appbar.dart';
 import 'package:navigaurd/screens/widgets/buttons/elevated.dart';
 
 class AccidentReportScreen extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:navigaurd/backend/models/weather.dart';
 import 'package:navigaurd/backend/services/weather_services.dart';
-import 'package:navigaurd/screens/widgets/appbar.dart';
+import 'package:navigaurd/screens/widgets/nav_bars/appbar.dart';
 import 'package:navigaurd/constants/date_time.dart';
 
 class WeatherScreen extends StatefulWidget {

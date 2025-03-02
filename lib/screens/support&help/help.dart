@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigaurd/constants/colors.dart';
-import 'package:navigaurd/screens/widgets/appbar.dart';
+import 'package:navigaurd/screens/widgets/nav_bars/appbar.dart';
 
 class SupportHelpScreen extends StatelessWidget {
   const SupportHelpScreen({super.key});

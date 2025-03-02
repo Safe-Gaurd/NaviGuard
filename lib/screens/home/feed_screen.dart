@@ -2,13 +2,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:navigaurd/screens/blood_bank/blood_bank.dart';
-import 'package:navigaurd/screens/chat_bot/chat_bot.dart';
+import 'package:navigaurd/screens/ai_chat_bot/chat_bot.dart';
 import 'package:navigaurd/screens/dash_cam/dash_cam.dart';
 import 'package:navigaurd/screens/feed_sub_screens/insurance.dart';
 import 'package:navigaurd/screens/feed_sub_screens/weather_short_cut.dart';
 import 'package:navigaurd/screens/home/widgets/adv_container.dart';
 import 'package:navigaurd/screens/hospitals/hospitals.dart';
 import 'package:navigaurd/screens/maps/maps.dart';
+import 'package:navigaurd/screens/widgets/nav_bars/appbar.dart';
+import 'package:navigaurd/screens/widgets/nav_bars/side_navbar.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/backend/models/weather.dart';
 import 'package:navigaurd/backend/providers/user_provider.dart';
@@ -114,8 +116,13 @@ class FeedScreenState extends State<FeedScreen> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+
     return Consumer<UserProvider>(builder: (context, provider, _) {
       return Scaffold(
+              appBar: const CustomAppbar(
+                label: "",
+              ),
+              drawer: CustomSideBar(provider: provider),
               body: provider.isLoading
               ? const Center(child: CircularProgressIndicator(color: blueColor))
               : SingleChildScrollView(
@@ -294,6 +301,20 @@ class FeedScreenState extends State<FeedScreen> {
                 LinearGradient(colors: [Colors.red[300]!, Colors.red[600]!]),
           ),
           CustomCardButton(
+            title: "Blood Bank",
+            imagePath: "assets/home/blood_bank.jpeg",
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => BloodBanksMapScreen())),
+            gradient: LinearGradient(colors: [Colors.pink[300]!, Colors.pink[500]!]),
+          ),
+          CustomCardButton(
+            title: "Hospitals",
+            imagePath: "assets/home/hospitals.jpg",
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => HospitalsMapScreen())),
+            gradient:LinearGradient(colors: [Colors.lightBlueAccent, Colors.blueAccent]),
+          ),
+          CustomCardButton(
             title: "Reports Analysis",
             imagePath: "assets/home/accident_analysis.jpg",
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -308,20 +329,6 @@ class FeedScreenState extends State<FeedScreen> {
                 builder: (context) => const InsuranceScreen())),
             gradient: LinearGradient(
                 colors: [Colors.indigo[300]!, Colors.purple[600]!]),
-          ),
-          CustomCardButton(
-            title: "Blood Bank",
-            imagePath: "assets/home/blood_bank.jpeg",
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => BloodBanksMapScreen())),
-            gradient: LinearGradient(colors: [Colors.pink[300]!, Colors.pink[500]!]),
-          ),
-          CustomCardButton(
-            title: "Hospitals",
-            imagePath: "assets/home/hospitals.jpg",
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => HospitalsMapScreen())),
-            gradient:LinearGradient(colors: [Colors.lightBlueAccent, Colors.blueAccent]),
           ),
         ],
       ),

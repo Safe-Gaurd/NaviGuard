@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/screens/dash_cam/recorded.dart';
 import 'package:navigaurd/screens/dash_cam/recording.dart';
-import 'package:navigaurd/screens/widgets/appbar.dart';
+import 'package:navigaurd/screens/widgets/nav_bars/appbar.dart';
 
 class DashcamScreen extends StatefulWidget {
   const DashcamScreen({super.key});

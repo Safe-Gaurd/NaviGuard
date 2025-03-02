@@ -4,7 +4,7 @@ import 'package:navigaurd/screens/maps/maps.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/backend/providers/report.dart';
 import 'package:navigaurd/constants/colors.dart';
-import 'package:navigaurd/screens/widgets/appbar.dart';
+import 'package:navigaurd/screens/widgets/nav_bars/appbar.dart';
 
 class ReportAnalysisScreen extends StatefulWidget {
   const ReportAnalysisScreen({super.key});

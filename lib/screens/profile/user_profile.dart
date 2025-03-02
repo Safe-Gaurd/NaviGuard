@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:navigaurd/screens/auth/selection.dart';
+import 'package:navigaurd/screens/coins/coins.dart';
+import 'package:navigaurd/screens/widgets/nav_bars/appbar.dart';
+import 'package:navigaurd/screens/widgets/nav_bars/side_navbar.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/backend/auth/auth_methods.dart';
 import 'package:navigaurd/backend/providers/user_provider.dart';
@@ -19,171 +22,185 @@ class UserProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(builder: (context, provider, _) {
       return Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                color: Colors.white.withOpacity(0.6),
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        provider.user.photoURL == ''
-                            ? CircleAvatar(
-                              radius: 60,
-                              backgroundColor: blueColor,
-                                child: Text(
-                                  provider.user.name[0],
-                                  style: const TextStyle(
-                                      fontSize: 24, fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            : CircleAvatar(
-                                radius: 60,
-                                backgroundImage:
-                                    NetworkImage(provider.user.photoURL!),
-                                backgroundColor: Colors.blueAccent,
+        appBar: CustomAppbar(
+          label: "Profile",
+        ),
+        drawer: CustomSideBar(provider: provider),
+        body: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              color: Colors.white.withOpacity(0.6),
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      provider.user.photoURL == ''
+                          ? CircleAvatar(
+                            radius: 60,
+                            backgroundColor: blueColor,
+                              child: Text(
+                                provider.user.name[0],
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
                               ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const EditProfileScreen(
-                                            // userProvider: provider,
-                                            ),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(Icons.edit),
+                            )
+                          : CircleAvatar(
+                              radius: 60,
+                              backgroundImage:
+                                  NetworkImage(provider.user.photoURL!),
+                              backgroundColor: Colors.blueAccent,
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      provider.user.name,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueAccent,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                          provider.user.phonenumber,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.blueGrey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: ListView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  children: [
-                    ProfileMenuItem(
-                      icon: Icons.person,
-                      text: 'Edit Profile',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const EditProfileScreen(
-                                // userProvider: provider,
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const EditProfileScreen(
+                                          // userProvider: provider,
+                                          ),
                                 ),
-                          ),
-                        );
-                      },
-                    ),
-                    ProfileMenuItem(
-                      icon: Icons.lock,
-                      text: 'Change Password',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ChangePasswordScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    ProfileMenuItem(
-                      icon: Icons.settings,
-                      text: 'Settings',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SettingsScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    ProfileMenuItem(
-                      icon: Icons.notifications,
-                      text: 'Notifications',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const NotificationScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    ProfileMenuItem(
-                      icon: Icons.help,
-                      text: 'Help',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SupportHelpScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    ProfileMenuItem(
-                      icon: Icons.logout,
-                      text: 'Logout',
-                      onTap: (){
-                        const CustomDialog().showLogoutDialog(
-                          context: context, 
-                          label: "LogOut", 
-                          message: "Are you sure you want to  Log Out?", 
-                          option2: "Cancel",
-                          onPressed2: () {
-                            Navigator.of(context).pop();
-                          }, 
-                          option1: "Yes",
-                          onPressed1: () {
-                              AuthService().logout();
-                              Navigator.of(context)
-                                  .pushReplacement(MaterialPageRoute(builder: (context)=> const UserTypeSelectionScreen()));
+                              );
                             },
-                        );
-                      },
-                      textColor: Colors.red, 
+                            icon: const Icon(Icons.edit),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    provider.user.name,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                        provider.user.phonenumber,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.blueGrey,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: ListView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                children: [
+                  ProfileMenuItem(
+                    icon: Icons.person,
+                    text: 'Edit Profile',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EditProfileScreen(
+                              // userProvider: provider,
+                              ),
+                        ),
+                      );
+                    },
+                  ),
+                  ProfileMenuItem(
+                    icon: Icons.lock,
+                    text: 'Change Password',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ChangePasswordScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  ProfileMenuItem(
+                    icon: Icons.currency_exchange,
+                    text: 'Naviguard Coins',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CoinsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  ProfileMenuItem(
+                    icon: Icons.settings,
+                    text: 'Settings',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  ProfileMenuItem(
+                    icon: Icons.notifications,
+                    text: 'Notifications',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  ProfileMenuItem(
+                    icon: Icons.help,
+                    text: 'Help',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SupportHelpScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  ProfileMenuItem(
+                    icon: Icons.logout,
+                    text: 'Logout',
+                    onTap: (){
+                      const CustomDialog().showLogoutDialog(
+                        context: context, 
+                        label: "LogOut", 
+                        message: "Are you sure you want to  Log Out?", 
+                        option2: "Cancel",
+                        onPressed2: () {
+                          Navigator.of(context).pop();
+                        }, 
+                        option1: "Yes",
+                        onPressed1: () {
+                            AuthService().logout();
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(builder: (context)=> const UserTypeSelectionScreen()));
+                          },
+                      );
+                    },
+                    textColor: Colors.red, 
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       );
     });

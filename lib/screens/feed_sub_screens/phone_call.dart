@@ -5,7 +5,7 @@ import 'package:navigaurd/constants/toast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:navigaurd/screens/feed_sub_screens/fav_person_call.dart';
 import 'package:navigaurd/screens/home/widgets/custom_card_button.dart';
-import 'package:navigaurd/screens/widgets/appbar.dart';
+import 'package:navigaurd/screens/widgets/nav_bars/appbar.dart';
 
 class PhoneCallScreen extends StatelessWidget {
   const PhoneCallScreen({super.key});
