@@ -1,12 +1,12 @@
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
+import 'package:navigaurd/screens/auth/selection.dart';
 import 'package:navigaurd/screens/maps/maps.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/backend/auth/auth_methods.dart';
 import 'package:navigaurd/backend/providers/user_provider.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
-import 'package:navigaurd/screens/auth/login.dart';
 import 'package:navigaurd/screens/home/feed_screen.dart';
 import 'package:navigaurd/screens/home/widgets/navbaritems.dart';
 import 'package:navigaurd/screens/notifications/notification.dart';
@@ -203,7 +203,7 @@ class HomeScreenState extends State<HomeScreen> {
                   onPressed1: () {
                     AuthService().logout();
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const LoginScreen()));
+                        builder: (context) => const UserTypeSelectionScreen()));
                   },
                 );
               },

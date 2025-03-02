@@ -6,6 +6,7 @@ class UserModel
   final String name;
   final String email;
   final String phonenumber;
+  final String officerTitle;
   final String? photoURL;
   final String? location;
 
@@ -14,6 +15,7 @@ class UserModel
     required this.name, 
     required this.email, 
     required this.phonenumber,
+    required this.officerTitle,
     this.photoURL="",
     this.location="Bhimavaram",
     });
@@ -25,6 +27,7 @@ class UserModel
         'name': name,
         'email': email,
         'phonenumber': phonenumber,
+        'officerTitle': officerTitle,
         'photoURL': photoURL,
         'location': location,
       };
@@ -42,6 +45,7 @@ class UserModel
     name: map['name'] ?? '',
     email: map['email'] ?? '',
     phonenumber: map['phonenumber'] ?? '',
+    officerTitle: map['officerTitle'] ?? '',
     photoURL: map['photoURL'] ?? '',
     location: map['location'] ?? '',
   );

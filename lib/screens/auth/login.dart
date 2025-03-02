@@ -9,7 +9,12 @@ import 'package:navigaurd/screens/auth/widgets/custom_auth_buttons.dart';
 import 'package:navigaurd/screens/auth/widgets/customtextformfield.dart';
 import 'package:navigaurd/screens/home/home.dart';
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+
+  final bool? isUser;
+
+  const LoginScreen({super.key,
+  this.isUser,
+  });
 
   @override
   State<LoginScreen> createState() => LoginScreenState();
@@ -125,7 +130,6 @@ class LoginScreenState extends State<LoginScreen>
               key: formKey,
               child: Column(
                 children: [
-                  
                   SizedBox(height: screenHeight*0.03),
                   const Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -226,7 +230,7 @@ class LoginScreenState extends State<LoginScreen>
               
                   // SizedBox(height: screenHeight*0.02,),
                   TextButton(onPressed: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupScreen()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignupScreen(isUser: widget.isUser,)));
                         }, 
                             child: const Text("Don't have an Account?", style: TextStyle(color: Colors.black54, fontSize: 15, fontWeight: FontWeight.bold),))
               

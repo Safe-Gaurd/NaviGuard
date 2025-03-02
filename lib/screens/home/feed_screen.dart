@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:navigaurd/screens/blood_bank/blood_bank.dart';
+import 'package:navigaurd/screens/chat_bot/chat_bot.dart';
 import 'package:navigaurd/screens/dash_cam/dash_cam.dart';
 import 'package:navigaurd/screens/feed_sub_screens/insurance.dart';
 import 'package:navigaurd/screens/feed_sub_screens/weather_short_cut.dart';
@@ -114,10 +115,10 @@ class FeedScreenState extends State<FeedScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Consumer<UserProvider>(builder: (context, provider, _) {
-      return provider.isLoading
-          ? const Center(child: CircularProgressIndicator(color: blueColor))
-          : Scaffold(
-              body: SingleChildScrollView(
+      return Scaffold(
+              body: provider.isLoading
+              ? const Center(child: CircularProgressIndicator(color: blueColor))
+              : SingleChildScrollView(
                 child: Column(
                   children: [
                     Container(
@@ -148,7 +149,7 @@ class FeedScreenState extends State<FeedScreen> {
                                 Text(
                                   provider.user.name.split(' ')[0],
                                   style: const TextStyle(
-                                      fontSize: 24,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.bold,
                                       color: backgroundColor),
                                 ),
@@ -165,7 +166,7 @@ class FeedScreenState extends State<FeedScreen> {
                           ),
                           Positioned(
                             top: screenHeight*0.01,
-                            right: -10,
+                            right: -screenWidth*0.08,
                             child: SizedBox(
                               width: screenWidth * .7,
                               height: screenHeight * .2,
@@ -227,6 +228,24 @@ class FeedScreenState extends State<FeedScreen> {
                     ),
                   ],
                 ),
+              ),
+              floatingActionButton: FloatingActionButton(
+                backgroundColor: blueColor,
+                elevation: 6,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: const Icon(
+                  Icons.chat,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ChatScreen(),
+                    ),
+                  );
+                },
               ),
             );
     });

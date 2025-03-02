@@ -78,6 +78,7 @@ class UserProvider extends ChangeNotifier {
     required String email,
     required String phonenumber,
     required String location,
+    required String officerTtitle,
   }) async {
     String res = '';
 
@@ -87,8 +88,9 @@ class UserProvider extends ChangeNotifier {
         name: name,
         email: email,
         phonenumber: phonenumber,
-        photoURL: photoURL,
+        photoURL: photoURL ?? "",
         location: location,
+        officerTitle: officerTtitle,
       );
 
       _isUpdate = true;

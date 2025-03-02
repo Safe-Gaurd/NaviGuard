@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:navigaurd/screens/auth/selection.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/backend/auth/auth_methods.dart';
 import 'package:navigaurd/backend/providers/user_provider.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/logout_dialog.dart';
-import 'package:navigaurd/screens/auth/login.dart';
 import 'package:navigaurd/screens/notifications/notification.dart';
 import 'package:navigaurd/screens/profile/change_password.dart';
 import 'package:navigaurd/screens/profile/edit_profile.dart';
@@ -173,7 +173,7 @@ class UserProfileScreen extends StatelessWidget {
                           onPressed1: () {
                               AuthService().logout();
                               Navigator.of(context)
-                                  .pushReplacement(MaterialPageRoute(builder: (context)=> const LoginScreen()));
+                                  .pushReplacement(MaterialPageRoute(builder: (context)=> const UserTypeSelectionScreen()));
                             },
                         );
                       },

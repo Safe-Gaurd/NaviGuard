@@ -2,6 +2,7 @@ import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/constants/toast.dart';
+import 'package:navigaurd/enum/enums.dart';
 import 'package:navigaurd/screens/auth/login.dart';
 import 'package:navigaurd/screens/auth/widgets/custom_auth_buttons.dart';
 import 'package:navigaurd/screens/auth/widgets/customtextformfield.dart';
@@ -9,7 +10,11 @@ import 'package:navigaurd/backend/auth/auth_methods.dart';
 import 'package:navigaurd/screens/home/home.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+  final bool? isUser;
+
+  const SignupScreen({super.key,
+  this.isUser,
+  });
 
   @override
   State<SignupScreen> createState() => SignupScreenState();
@@ -27,6 +32,7 @@ class SignupScreenState extends State<SignupScreen> {
   bool obscureText = true;
   bool isLoading = false;
   bool isgoogleLoading = false;
+  Officer? selectedOfficer;
 
   @override
   void dispose() {
@@ -53,12 +59,15 @@ class SignupScreenState extends State<SignupScreen> {
       isLoading = true;
     });
 
+    String selectedOfficerTitle=getOfficerTitle(selectedOfficer!);
+
     try {
       String res = await authService.handleSignUpWithEmail(
         email: email.text.trim(),
         password: password.text.trim(),
         name: name.text.trim(),
         phoneNumber: phonenum.text.trim(),
+        officerTitle: selectedOfficerTitle
       );
 
       if (res == "success") {
@@ -250,6 +259,65 @@ class SignupScreenState extends State<SignupScreen> {
                             ? 'Please enter a valid phone number'
                             : null,
                   ),
+
+
+                  if (!widget.isUser!)
+                    Padding(
+                      padding: const EdgeInsets.all(7.0),
+                      child: DropdownButtonHideUnderline(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(20.0),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                child: Icon(Icons.security),
+                              ),
+                              Expanded(
+                                child: DropdownButton<Officer>(
+                                  value: selectedOfficer,
+                                  isExpanded: true,
+                                  hint: const Text(
+                                    'Select Officer Type',
+                                    style: TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                  items: Officer.values.map((officer) {
+                                    return DropdownMenuItem<Officer>(
+                                      value: officer,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            getOfficerTitle(officer),
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Icon(getOfficerIcon(officer)),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (Officer? newValue) {
+                                    setState(() {
+                                      selectedOfficer = newValue;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
                   SizedBox(
                     height: screenHeight*.01,
                   ),
@@ -279,7 +347,7 @@ class SignupScreenState extends State<SignupScreen> {
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const LoginScreen()));
+                          builder: (context) => LoginScreen(isUser: widget.isUser,)));
                     },
                     child: const Text(
                       "Already Have an Account?",

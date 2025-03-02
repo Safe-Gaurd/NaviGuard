@@ -27,15 +27,6 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
         return AppBar(
           backgroundColor: blueColor,
           toolbarHeight: 70,
-          // leading: Builder(
-          //   builder: (context) => IconButton(
-          //     icon: const Icon(Icons.menu),
-          //     tooltip: 'Open Menu',
-          //     onPressed: () {
-          //       Scaffold.of(context).openDrawer();
-          //     },
-          //   ),
-          // ),
           title: Text(
             label,
             style: style ??
@@ -46,17 +37,6 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
                 ),
           ),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.help_outline_sharp),
-              tooltip: 'Help',
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const SupportHelpScreen(),
-                  ),
-                );
-              },
-            ),
             IconButton(
               icon: const Icon(Icons.notifications),
               tooltip: 'Notifications',

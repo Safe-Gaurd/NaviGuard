@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:navigaurd/screens/auth/login.dart';
+import 'package:navigaurd/screens/auth/selection.dart';
 import 'package:navigaurd/screens/onboarding/widgets/onboarding_sub.dart';
 import 'package:navigaurd/screens/widgets/buttons/elevated.dart';
 import 'package:navigaurd/screens/widgets/buttons/textfield.dart';
@@ -79,14 +79,14 @@ class OnboardingMainScreenState extends State<OnboardingMainScreen> {
           isLastPage
               ? Positioned(
                   bottom: 25,
-                  left: 115,
+                  left: screenWidth * 0.32,
                   child: CustomElevatedButton(
                     backgroundColor: Colors.teal,
                     foregroundColor: Colors.white,
                     onPressed: () {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
+                          builder: (context) => const UserTypeSelectionScreen(),
                         ),
                       );
                     },

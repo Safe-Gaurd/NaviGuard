@@ -14,6 +14,7 @@ class AuthService {
     required String email,
     required String password,
     required String phoneNumber,
+    required String officerTitle,
     String photoURL = "",
   }) async {
     String res = "";
@@ -22,7 +23,7 @@ class AuthService {
           await auth.createUserWithEmailAndPassword(email: email, password: password);
       final User user = result.user!;
       UserModel data =
-          UserModel(uid: user.uid, name: name, email: email, phonenumber: phoneNumber, photoURL: photoURL);
+          UserModel(uid: user.uid, name: name, email: email, phonenumber: phoneNumber, photoURL: photoURL, officerTitle: officerTitle);
       await firestore.collection('users').doc(user.uid).set(data.toMap());
       res = "success";
     } on FirebaseAuthException catch (e) {
@@ -96,6 +97,7 @@ class AuthService {
         email: user.email ?? "No email",
         phonenumber: user.phoneNumber ?? "",
         photoURL: user.photoURL ?? "",
+        officerTitle: "Officer",
       );
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set(data.toMap());
     } else {
