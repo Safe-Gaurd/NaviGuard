@@ -243,7 +243,7 @@ class FeedScreenState extends State<FeedScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: const Icon(
-                  Icons.chat,
+                  Icons.smart_toy_outlined,
                   color: Colors.white,
                 ),
                 onPressed: () {

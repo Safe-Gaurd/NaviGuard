@@ -1,5 +1,6 @@
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
+import 'package:navigaurd/screens/chat/chat_list_screen.dart';
 import 'package:navigaurd/screens/chat/community_chat.dart';
 import 'package:navigaurd/screens/maps/maps.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,7 @@ class HomeScreenState extends State<HomeScreen> {
   final List<Widget> screens = [
     const FeedScreen(),
     MapScreen(),
-    CommunityScreen(),
+    ChatListScreen(),
     const UserProfileScreen(),
   ];
 
