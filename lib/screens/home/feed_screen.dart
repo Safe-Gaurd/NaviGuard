@@ -119,13 +119,13 @@ class FeedScreenState extends State<FeedScreen> {
 
     return Consumer<UserProvider>(builder: (context, provider, _) {
       return Scaffold(
-              appBar: const CustomAppbar(
-                label: "",
-              ),
-              drawer: CustomSideBar(provider: provider),
-              body: provider.isLoading
-              ? const Center(child: CircularProgressIndicator(color: blueColor))
-              : SingleChildScrollView(
+        appBar: const CustomAppbar(
+          label: "",
+        ),
+        drawer: CustomSideBar(provider: provider),
+        body: provider.isLoading
+            ? const Center(child: CircularProgressIndicator(color: blueColor))
+            : SingleChildScrollView(
                 child: Column(
                   children: [
                     Container(
@@ -172,8 +172,8 @@ class FeedScreenState extends State<FeedScreen> {
                             ),
                           ),
                           Positioned(
-                            top: screenHeight*0.01,
-                            right: -screenWidth*0.08,
+                            top: screenHeight * 0.01,
+                            right: -screenWidth * 0.08,
                             child: SizedBox(
                               width: screenWidth * .7,
                               height: screenHeight * .2,
@@ -189,7 +189,7 @@ class FeedScreenState extends State<FeedScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: SizedBox(
-                        height: screenHeight*0.2,
+                        height: screenHeight * 0.2,
                         child: PageView(
                           controller: controller,
                           children: [
@@ -236,36 +236,40 @@ class FeedScreenState extends State<FeedScreen> {
                   ],
                 ),
               ),
-              floatingActionButton: FloatingActionButton(
-                backgroundColor: blueColor,
-                elevation: 6,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: const Icon(
-                  Icons.smart_toy_outlined,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const ChatScreen(),
-                    ),
-                  );
-                },
+        floatingActionButton: SizedBox(
+          width: screenWidth * .3,
+          height: screenHeight * .1,
+          child: FloatingActionButton(
+            backgroundColor: blueColor,
+            elevation: 6,
+            shape: const CircleBorder(),
+            child: ClipOval(
+              child: Image.asset(
+                "assets/feed/chat2.jpg",
+                fit: BoxFit.cover,
               ),
-            );
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const ChatScreen(),
+                ),
+              );
+            },
+          ),
+        ),
+      );
     });
   }
 
   Widget customCard(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: screenHeight*.88,
+      height: screenHeight * .88,
       child: GridView.count(
         crossAxisCount: 2,
-        mainAxisSpacing: screenHeight*0.01,
-        crossAxisSpacing: screenHeight*0.01,
+        mainAxisSpacing: screenHeight * 0.01,
+        crossAxisSpacing: screenHeight * 0.01,
         physics: NeverScrollableScrollPhysics(),
         children: [
           CustomCardButton(
@@ -303,16 +307,18 @@ class FeedScreenState extends State<FeedScreen> {
           CustomCardButton(
             title: "Blood Bank",
             imagePath: "assets/home/blood_bank.jpeg",
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => BloodBanksMapScreen())),
-            gradient: LinearGradient(colors: [Colors.pink[300]!, Colors.pink[500]!]),
+            onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => BloodBanksMapScreen())),
+            gradient:
+                LinearGradient(colors: [Colors.pink[300]!, Colors.pink[500]!]),
           ),
           CustomCardButton(
             title: "Hospitals",
             imagePath: "assets/home/hospitals.jpg",
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => HospitalsMapScreen())),
-            gradient:LinearGradient(colors: [Colors.lightBlueAccent, Colors.blueAccent]),
+            onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => HospitalsMapScreen())),
+            gradient: LinearGradient(
+                colors: [Colors.lightBlueAccent, Colors.blueAccent]),
           ),
           CustomCardButton(
             title: "Reports Analysis",

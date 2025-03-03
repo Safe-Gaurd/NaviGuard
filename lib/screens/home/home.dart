@@ -1,7 +1,6 @@
 import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:navigaurd/screens/chat/chat_list_screen.dart';
-import 'package:navigaurd/screens/chat/community_chat.dart';
 import 'package:navigaurd/screens/maps/maps.dart';
 import 'package:provider/provider.dart';
 import 'package:navigaurd/backend/providers/user_provider.dart';
@@ -81,7 +80,7 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.message),
-                    label: 'Navigation',
+                    label: 'Messages',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.person_pin),
@@ -104,5 +103,4 @@ class HomeScreenState extends State<HomeScreen> {
             );
     });
   }
-
 }

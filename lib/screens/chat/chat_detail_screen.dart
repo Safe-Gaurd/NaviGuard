@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/screens/chat/chat_message_model.dart';
 import 'package:navigaurd/screens/chat/chat_provider.dart';
 import 'package:provider/provider.dart';
@@ -26,16 +27,17 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     return Consumer<ChatProvider>(
       builder: (context, chatProvider, child) {
         final selectedRoom = chatProvider.selectedRoom;
-        
+
         if (selectedRoom == null) {
           return const Scaffold(
             body: Center(child: Text('No chat selected')),
           );
         }
-        
+
         return Scaffold(
           appBar: AppBar(
             title: Text(selectedRoom.roomName),
+            backgroundColor: blueColor,
             actions: [
               if (selectedRoom.roomType == 'community')
                 IconButton(
@@ -46,7 +48,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       context: context,
                       builder: (context) => AlertDialog(
                         title: Text('${selectedRoom.roomName} Info'),
-                        content: Text('${selectedRoom.participants.length} members'),
+                        content:
+                            Text('${selectedRoom.participants.length} members'),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
@@ -82,7 +85,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                         },
                       ),
               ),
-              
+
               // Message input
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -110,10 +113,13 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                         maxLines: 5,
                       ),
                     ),
-                    
+
                     // Send button
                     IconButton(
-                      icon: const Icon(Icons.send),
+                      icon: const Icon(
+                        Icons.send,
+                        color: blueColor,
+                      ),
                       color: Theme.of(context).primaryColor,
                       onPressed: () {
                         if (_messageController.text.trim().isNotEmpty) {
@@ -131,16 +137,15 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       },
     );
   }
-  
+
   Widget _buildMessageItem(ChatMessage message, String currentUserId) {
     final isCurrentUser = message.senderId == currentUserId;
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: Row(
-        mainAxisAlignment: isCurrentUser
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
+        mainAxisAlignment:
+            isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!isCurrentUser) ...[
@@ -155,14 +160,11 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             ),
             const SizedBox(width: 8),
           ],
-          
           Flexible(
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: isCurrentUser
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey.shade200,
+                color: isCurrentUser ? blueColor : Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(18),
               ),
               child: Column(
@@ -199,7 +201,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       ),
     );
   }
-  
+
   String _formatMessageTime(DateTime dateTime) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -209,7 +211,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       dateTime.month,
       dateTime.day,
     );
-    
+
     if (messageDate == today) {
       return 'Today ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
     } else if (messageDate == yesterday) {

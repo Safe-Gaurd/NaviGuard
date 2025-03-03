@@ -62,6 +62,7 @@ dependencies:
   geolocator: ^13.0.2
   flutter_polyline_points: ^2.1.0
   file_picker: ^8.3.1
+  formatted_text: ^4.0.1
 
 
 

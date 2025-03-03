@@ -28,11 +28,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'SafeGuard',
         theme: ThemeData().copyWith(
-          scaffoldBackgroundColor: Colors.white,
-          textTheme: GoogleFonts.dmSansTextTheme(
-            Theme.of(context).textTheme,
-        )),
-        // home: UserTypeSelectionScreen(),
+            scaffoldBackgroundColor: Colors.white,
+            textTheme: GoogleFonts.dmSansTextTheme(
+              Theme.of(context).textTheme,
+            )),
+        // home: FeedScreen(),
         home: StreamBuilder(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {

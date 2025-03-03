@@ -1,11 +1,11 @@
 import 'dart:convert';
+import 'package:formatted_text/formatted_text.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:navigaurd/constants/colors.dart';
 import 'package:navigaurd/screens/ai_chat_bot/widgets/typing_indicator.dart';
 import 'package:navigaurd/screens/maps/maps.dart';
 import 'package:provider/provider.dart';
-
 
 class ChatMessage {
   final String text;
@@ -15,8 +15,8 @@ class ChatMessage {
   final String? mapCommand;
 
   ChatMessage({
-    required this.text, 
-    required this.isUser, 
+    required this.text,
+    required this.isUser,
     DateTime? timestamp,
     this.isNavigation = false,
     this.mapCommand,
@@ -28,7 +28,7 @@ class ChatProvider extends ChangeNotifier {
   final List<ChatMessage> _messages = [];
   bool _isTyping = false;
   final ScrollController scrollController = ScrollController();
-  final String apiBaseUrl = 'https://ai-assisstance-chatbot.onrender.com/'; 
+  final String apiBaseUrl = 'https://ai-assisstance-chatbot.onrender.com/';
 
   // Getters
   List<ChatMessage> get messages => _messages;
@@ -56,7 +56,7 @@ class ChatProvider extends ChangeNotifier {
         final responseData = jsonDecode(response.body);
         final String aiMessage = responseData['result'];
         final bool isNavigation = responseData['is_navigation'] ?? false;
-        
+
         // Check if there's a map command in the response
         String? mapCommand;
         if (aiMessage.contains("MAP_SCREEN:")) {
@@ -68,20 +68,20 @@ class ChatProvider extends ChangeNotifier {
             }
           }
         }
-        
+
         // Clean the message (remove map command if present)
-        final cleanMessage = mapCommand != null 
-            ? aiMessage.replaceAll(mapCommand, '').trim() 
+        final cleanMessage = mapCommand != null
+            ? aiMessage.replaceAll(mapCommand, '').trim()
             : aiMessage;
-        
+
         // Add AI response
         _messages.add(ChatMessage(
-          text: cleanMessage, 
+          text: cleanMessage,
           isUser: false,
           isNavigation: isNavigation,
           mapCommand: mapCommand,
         ));
-        
+
         // Handle navigation command if present
         if (mapCommand != null) {
           _handleMapCommand(mapCommand);
@@ -101,29 +101,28 @@ class ChatProvider extends ChangeNotifier {
       scrollToBottom();
     }
   }
-  
+
   // Handle map commands by launching navigation
   void _handleMapCommand(String command) {
     // Example: MAP_SCREEN:destination=Hospital General;mode=driving
     try {
       final params = command.replaceFirst('MAP_SCREEN:', '').split(';');
       final Map<String, String> paramMap = {};
-      
+
       for (final param in params) {
         final parts = param.split('=');
         if (parts.length == 2) {
           paramMap[parts[0]] = parts[1];
         }
       }
-      
+
       final destination = paramMap['destination'];
       final mode = paramMap['mode'] ?? 'driving';
-      
+
       if (destination != null) {
         // Here you would typically navigate to your map screen
         // For this example, we'll print what would happen
         print('Navigating to: $destination in mode: $mode');
-        
       }
     } catch (e) {
       print('Error handling map command: $e');
@@ -270,7 +269,8 @@ class _ChatScreenContent extends StatelessWidget {
                 color: message.isUser
                     ? const Color(0xFF4285F4)
                     : message.isNavigation
-                        ? Color(0xFFE3F2FD) // Light blue for navigation messages
+                        ? Color(
+                            0xFFE3F2FD) // Light blue for navigation messages
                         : Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
@@ -284,8 +284,13 @@ class _ChatScreenContent extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    message.text,
+                  FormattedText(
+                    message.text
+                        .replaceAll(
+                            RegExp(
+                                r'MAP_SCREEN:destination=.*?;mode=driving\.'),
+                            '')
+                        .trim(),
                     style: TextStyle(
                       color: message.isUser ? Colors.white : Colors.black87,
                       fontSize: 16,
@@ -299,10 +304,10 @@ class _ChatScreenContent extends StatelessWidget {
                           // Extract destination from map command
                           final regex = RegExp(r'destination=(.*?)(;|$)');
                           final match = regex.firstMatch(message.mapCommand!);
-                          
+
                           if (match != null && match.groupCount >= 1) {
                             final destination = match.group(1);
-                            
+
                             // Navigate to MapScreen with the extracted parameters
                             Navigator.push(
                               context,
@@ -332,8 +337,6 @@ class _ChatScreenContent extends StatelessWidget {
       ),
     );
   }
-
-
 
   Widget _buildAvatar({required bool isUser}) {
     return Padding(

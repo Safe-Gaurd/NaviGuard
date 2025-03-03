@@ -12,8 +12,9 @@ import 'package:navigaurd/screens/home/home.dart';
 class SignupScreen extends StatefulWidget {
   final bool? isUser;
 
-  const SignupScreen({super.key,
-  this.isUser,
+  const SignupScreen({
+    super.key,
+    this.isUser,
   });
 
   @override
@@ -59,19 +60,18 @@ class SignupScreenState extends State<SignupScreen> {
       isLoading = true;
     });
 
-    String selectedOfficerTitle=getOfficerTitle(selectedOfficer!);
+    String selectedOfficerTitle = getOfficerTitle(selectedOfficer!);
 
     try {
       String res = await authService.handleSignUpWithEmail(
-        email: email.text.trim(),
-        password: password.text.trim(),
-        name: name.text.trim(),
-        phoneNumber: phonenum.text.trim(),
-        officerTitle: selectedOfficerTitle
-      );
+          email: email.text.trim(),
+          password: password.text.trim(),
+          name: name.text.trim(),
+          phoneNumber: phonenum.text.trim(),
+          officerTitle: selectedOfficerTitle);
 
       if (res == "success") {
-        Navigator.of(context).pushReplacement(
+        Navigator.of(context).push(
           MaterialPageRoute(
               builder: (context) => const HomeScreen(
                     isLoginOrSignUp: true,
@@ -105,38 +105,36 @@ class SignupScreenState extends State<SignupScreen> {
     setState(() {
       isgoogleLoading = true;
     });
-    try{
-        String res = await authService.handleSignUpWithGoogle();
+    try {
+      String res = await authService.handleSignUpWithGoogle();
 
-        if (res == "success") {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-        } else {
-          toastMessage(
-          context: context,
-          message: res,
-          leadingIcon: const Icon(Icons.error),
-          toastColor: Colors.red[200],
-          borderColor: Colors.red,
-          position: DelightSnackbarPosition.top);
-        }
-    } catch (e) {
+      if (res == "success") {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      } else {
         toastMessage(
+            context: context,
+            message: res,
+            leadingIcon: const Icon(Icons.error),
+            toastColor: Colors.red[200],
+            borderColor: Colors.red,
+            position: DelightSnackbarPosition.top);
+      }
+    } catch (e) {
+      toastMessage(
           context: context,
           message: e.toString(),
           leadingIcon: const Icon(Icons.error),
           toastColor: Colors.red[200],
           borderColor: Colors.red,
           position: DelightSnackbarPosition.top);
-    }  
-    finally {
+    } finally {
       setState(() {
         isgoogleLoading = false;
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -185,8 +183,8 @@ class SignupScreenState extends State<SignupScreen> {
                   ),
                   Image.asset(
                     "assets/auth/signup.jpg",
-                    width: screenWidth*0.65,
-                    height: screenHeight*.25,
+                    width: screenWidth * 0.65,
+                    height: screenHeight * .25,
                   ),
                   const SizedBox(
                     height: 20,
@@ -259,8 +257,6 @@ class SignupScreenState extends State<SignupScreen> {
                             ? 'Please enter a valid phone number'
                             : null,
                   ),
-
-
                   if (!widget.isUser!)
                     Padding(
                       padding: const EdgeInsets.all(7.0),
@@ -274,7 +270,8 @@ class SignupScreenState extends State<SignupScreen> {
                           child: Row(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
                                 child: Icon(Icons.security),
                               ),
                               Expanded(
@@ -317,9 +314,8 @@ class SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                     ),
-
                   SizedBox(
-                    height: screenHeight*.01,
+                    height: screenHeight * .01,
                   ),
                   LoginSignupButtons(
                     label: "SignUP",
@@ -328,7 +324,7 @@ class SignupScreenState extends State<SignupScreen> {
                     backgroundColor: Colors.blue[500],
                   ),
                   SizedBox(
-                    height: screenHeight*.015,
+                    height: screenHeight * .015,
                   ),
                   const Text(
                     "Or",
@@ -336,7 +332,7 @@ class SignupScreenState extends State<SignupScreen> {
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    height: screenHeight*.015,
+                    height: screenHeight * .015,
                   ),
                   LoginSignupButtons(
                     imagepath: "assets/auth/google.jpg",
@@ -347,7 +343,9 @@ class SignupScreenState extends State<SignupScreen> {
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => LoginScreen(isUser: widget.isUser,)));
+                          builder: (context) => LoginScreen(
+                                isUser: widget.isUser,
+                              )));
                     },
                     child: const Text(
                       "Already Have an Account?",
@@ -355,7 +353,7 @@ class SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: screenHeight*.05,
+                    height: screenHeight * .05,
                   ),
                 ],
               ),
